@@ -12,7 +12,8 @@ export default defineComponent({
   name: "GameView",
 });
 
-const socket = io("http://localhost:3000");
+//const socket = io("http://localhost:3000");
+const socket = io("https://plantsgameserver.onrender.com");
 
 socket.on("connect", () => {
   console.log("Connected!");
