@@ -48,7 +48,7 @@ socket.on('closedGame', function () {
       <button @click="addUser">Enviar</button>
     </div>
     <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
-    <div v-if="!nameConnected">
+    <div v-if="nameConnected">
       <div>Socket id: {{ socketId }}</div>
       <div>User name: {{ nameConnected }}</div>
     </div>
