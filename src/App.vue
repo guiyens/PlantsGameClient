@@ -4,7 +4,7 @@ import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 
 //var socket = io('http://localhost:3000', { transports: ['websocket'] })
-var socket = io('https://plantsgameserver.onrender.com:3000', { transports: ['websocket'] })
+var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
 
 const name = ref('')
 const nameConnected = ref('')
