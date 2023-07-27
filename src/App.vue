@@ -43,18 +43,21 @@ socket.on('closedGame', function () {
 
 <template>
   <main>
-    <div v-if="!nameConnected">
-      Nombre: <input type="text" v-model="name" />
-      <button @click="addUser">Enviar</button>
-    </div>
-    <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
-    <div v-if="nameConnected">
-      <div>Socket id: {{ socketId }}</div>
-      <div>User name: {{ nameConnected }}</div>
-    </div>
-    <div v-if="game.state === StateEnum.STARTED">
-      {{ nameConnected }} <strong v-if="game.userActive !== socketId">no</strong> es tu turno
-      <button @click="nextTurn()">Pasar turno</button>
+    <p v-if="error">{{ error }}</p>
+    <div v-if="!error">
+      <div v-if="!nameConnected">
+        Nombre: <input type="text" v-model="name" />
+        <button @click="addUser">Enviar</button>
+      </div>
+      <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
+      <div v-if="nameConnected">
+        <div>Socket id: {{ socketId }}</div>
+        <div>User name: {{ nameConnected }}</div>
+      </div>
+      <div v-if="game.state === StateEnum.STARTED">
+        {{ nameConnected }} <strong v-if="game.userActive !== socketId">no</strong> es tu turno
+        <button v-if="game.userActive === socketId" @click="nextTurn()">Pasar turno</button>
+      </div>
     </div>
   </main>
 </template>
