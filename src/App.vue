@@ -42,13 +42,13 @@ socket.on('closedGame', function () {
 </script>
 
 <template>
-  <div v-if="!nameConnected">
-    Nombre: <input type="text" v-model="name" />
-    <button @click="addUser">Enviar</button>
-  </div>
   <main>
-    <div v-if="game.state === StateEnum.WAITING">
-      <h2 v-if="nameConnected">Esperando a más jugadores</h2>
+    <div v-if="!nameConnected">
+      Nombre: <input type="text" v-model="name" />
+      <button @click="addUser">Enviar</button>
+    </div>
+    <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
+    <div v-if="!nameConnected">
       <div>Socket id: {{ socketId }}</div>
       <div>User name: {{ nameConnected }}</div>
     </div>
