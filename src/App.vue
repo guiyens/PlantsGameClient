@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
-import { StateEnum } from '@/Infertaces/IGame'
+import { io } from 'socket.io-client'
+import { StateEnum, type IGame } from '@/Infertaces/IGame'
 
 //var socket = io('http://localhost:3000', { transports: ['websocket'] })
 var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
@@ -20,11 +20,11 @@ function nextTurn() {
   socket.emit('nextTurn', name.value)
 }
 
-socket.on('addedUser', function (name) {
+socket.on('addedUser', function (name: string) {
   nameConnected.value = name
 })
 
-socket.on('socketCreated', function (id) {
+socket.on('socketCreated', function (id: string) {
   socketId.value = id
 })
 
@@ -32,7 +32,7 @@ socket.on('alreadyAddedUser', function () {
   error.value = 'User name is not available, choose a new one'
 })
 
-socket.on('updateGame', function (newGame) {
+socket.on('updateGame', function (newGame: IGame) {
   game.value = newGame
 })
 

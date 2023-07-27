@@ -1,5 +1,6 @@
 {
   "files": [],
+  "extensions": [".js", ".jsx", ".ts", ".tsx", "..."],
   "references": [
     {
       "path": "./tsconfig.node.json"
