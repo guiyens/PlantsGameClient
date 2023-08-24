@@ -4,7 +4,7 @@ const texts = ref([
   {
     title: 'Introducción',
     text: [
-      'PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de fisiología y producción vegetal de manera entretenida. También es una herramienta docente que fomenta el aprendizaje en el aula de conceptos científico- técnicos, relacionados con las plantas y su cultivo, de manera sencilla en un ambiente distendido. El argumento del juego es asumir el reto de hacer crecer, mantener y cosechar un cultivo acosado por diversos factores de estrés provocados por los jugadores adversarios.',
+      'También es una herramienta docente que fomenta el aprendizaje en el aula de conceptos científico- técnicos, relacionados con las plantas y su cultivo, de manera sencilla en un ambiente distendido. El argumento del juego es asumir el reto de hacer crecer, mantener y cosechar un cultivo acosado por diversos factores de estrés provocados por los jugadores adversarios.',
       'El juego se puede adaptar a diferentes niveles de educación, desde primaria hasta universitaria. La versión básica está dirigida al público en general y enseñanza secundaria, y está preparada para que puedan jugar entre 2 y 6 participantes. La duración de cada partida dependerá del número de jugadores, no siendo de más de 30 minutos.'
     ]
   },
@@ -109,6 +109,9 @@ const texts = ref([
         PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de
         fisiología y producción vegetal de manera entretenida.
       </p>
+      <button class="play-button" onclick="alert('Para jugar contacta con el administrador')">
+        Jugar
+      </button>
       <img class="logo2" src="@/assets/images/logo2.png" alt="" />
       <img class="logo1" src="@/assets/images/logo1.png" alt="" />
     </div>
@@ -157,16 +160,14 @@ const texts = ref([
     box-sizing: border-box;
   }
 }
-
-.main-image {
-  width: 180px;
-  margin: 0 auto;
-  display: block;
-}
 .main-image {
   width: 260px;
   margin: 70px auto 20px;
   display: block;
+  @media only screen and (max-width: 768px) {
+    margin-top: 30px;
+    width: 190px;
+  }
 }
 .logo2 {
   width: 100px;
@@ -187,6 +188,10 @@ const texts = ref([
   width: 80%;
   font-family: 'Bricolage Grotesque', sans-serif;
   margin: 0 auto;
+  @media only screen and (max-width: 768px) {
+    font-size: 20px;
+    line-height: 25px;
+  }
 }
 .section-title {
   font-family: 'Bricolage Grotesque', sans-serif;
@@ -207,5 +212,14 @@ const texts = ref([
 }
 .section {
   margin-bottom: 40px;
+}
+.play-button {
+  background-color: white;
+  font-size: 18px;
+  display: block;
+  margin: 20px auto 0;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 </style>
