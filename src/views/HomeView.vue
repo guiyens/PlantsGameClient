@@ -191,7 +191,7 @@ const texts = ref([
   font-family: 'Bricolage Grotesque', sans-serif;
   margin: 0 auto;
   @media only screen and (max-width: 768px) {
-    font-size: 22px;
+    font-size: 20px;
     line-height: 27px;
   }
 }
@@ -224,7 +224,7 @@ const texts = ref([
   padding: 10px 20px;
   cursor: pointer;
   @media only screen and (max-width: 768px) {
-    margin-top: 40px;
+    margin-top: 30px;
   }
 }
 </style>
