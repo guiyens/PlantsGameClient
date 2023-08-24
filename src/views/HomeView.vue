@@ -145,7 +145,7 @@ const texts = ref([
     overflow-y: visible;
     position: relative;
     box-sizing: border-box;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 40px);
   }
 }
 .right-side {
@@ -169,6 +169,7 @@ const texts = ref([
   display: block;
   @media only screen and (max-width: 768px) {
     width: 220px;
+    margin-top: 60px;
   }
 }
 .logo2 {
