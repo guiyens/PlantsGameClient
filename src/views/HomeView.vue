@@ -121,8 +121,8 @@ const texts = ref([
         <p class="section-text" v-for="(paragraph, index2) in text.text" :key="index2">
           {{ paragraph }}
         </p>
-        <img class="section-image" v-for="(img, index3) in text.images" :key="index3" :src="img" />
       </article>
+      <img class="section-image" src="@/assets/images/howto2.png" alt="" />
     </div>
   </header>
 </template>
@@ -145,6 +145,7 @@ const texts = ref([
     overflow-y: visible;
     position: relative;
     box-sizing: border-box;
+    height: calc(100vh - 20px);
   }
 }
 .right-side {
@@ -158,6 +159,8 @@ const texts = ref([
     overflow-y: visible;
     position: relative;
     box-sizing: border-box;
+    height: auto;
+    padding: 30px;
   }
 }
 .main-image {
@@ -165,8 +168,7 @@ const texts = ref([
   margin: 70px auto 20px;
   display: block;
   @media only screen and (max-width: 768px) {
-    margin-top: 30px;
-    width: 190px;
+    width: 220px;
   }
 }
 .logo2 {
@@ -189,8 +191,8 @@ const texts = ref([
   font-family: 'Bricolage Grotesque', sans-serif;
   margin: 0 auto;
   @media only screen and (max-width: 768px) {
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 22px;
+    line-height: 27px;
   }
 }
 .section-title {
@@ -221,5 +223,8 @@ const texts = ref([
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+  @media only screen and (max-width: 768px) {
+    margin-top: 40px;
+  }
 }
 </style>
