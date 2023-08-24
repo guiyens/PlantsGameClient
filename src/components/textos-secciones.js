@@ -1,15 +1,13 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-const texts = ref([
+export const texts = [
   {
-    title: 'Introducción',
+    title: '1.Introducción',
     text: [
       'PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de fisiología y producción vegetal de manera entretenida. También es una herramienta docente que fomenta el aprendizaje en el aula de conceptos científico- técnicos, relacionados con las plantas y su cultivo, de manera sencilla en un ambiente distendido. El argumento del juego es asumir el reto de hacer crecer, mantener y cosechar un cultivo acosado por diversos factores de estrés provocados por los jugadores adversarios.',
       'El juego se puede adaptar a diferentes niveles de educación, desde primaria hasta universitaria. La versión básica está dirigida al público en general y enseñanza secundaria, y está preparada para que puedan jugar entre 2 y 6 participantes. La duración de cada partida dependerá del número de jugadores, no siendo de más de 30 minutos.'
     ]
   },
   {
-    title: 'Material',
+    title: '2.Material',
     text: [
       'El juego consta de 113 cartas:',
       '• 24 cartas de órganos vegetativos: raíz (8), tallo (8) y hojas (8).',
@@ -95,117 +93,6 @@ const texts = ref([
     text: [
       'Los jugadores tendrán siempre 4 cartas ocultas en su mano y podrán tener cartas visibles delante de ellos en la superficie de juego. Estas últimas corresponderán a la planta del jugador, sus tratamientos preventivos, las condiciones inductoras de floración, las flores y los frutos, y los estreses a los que esté sometida. Un ejemplo de distribución sería el siguiente:'
     ],
-    images: ['/src/assets/images/howto2.png']
+    images: ['@/assets/images/howto.png']
   }
-])
-</script>
-
-<template>
-  <h1 v-show="false">Planta</h1>
-  <header>
-    <div class="left-side">
-      <img class="main-image" src="@/assets/images/planta-imagen.png" alt="" />
-      <p class="main-text">
-        PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de
-        fisiología y producción vegetal de manera entretenida.
-      </p>
-      <img class="logo2" src="@/assets/images/logo2.png" alt="" />
-      <img class="logo1" src="@/assets/images/logo1.png" alt="" />
-    </div>
-    <div class="right-side">
-      <article class="section" v-for="(text, index) in texts" :key="index">
-        <h2 class="section-title">{{ text.title }}</h2>
-        <p class="section-text" v-for="(paragraph, index2) in text.text" :key="index2">
-          {{ paragraph }}
-        </p>
-        <img class="section-image" v-for="(img, index3) in text.images" :key="index3" :src="img" />
-      </article>
-    </div>
-  </header>
-</template>
-
-<style>
-.left-side,
-.right-side {
-  height: 100vh;
-  position: absolute;
-  top: 0;
-}
-.left-side {
-  width: 35vw;
-  background-color: #50ba6c;
-  left: 0;
-  overflow: hidden;
-  @media only screen and (max-width: 768px) {
-    left: 0;
-    width: 100%;
-    overflow-y: visible;
-    position: relative;
-    box-sizing: border-box;
-  }
-}
-.right-side {
-  width: 65vw;
-  left: 35vw;
-  overflow-y: auto;
-  padding: 50px;
-  @media only screen and (max-width: 768px) {
-    left: 0;
-    width: 100%;
-    overflow-y: visible;
-    position: relative;
-    box-sizing: border-box;
-  }
-}
-
-.main-image {
-  width: 180px;
-  margin: 0 auto;
-  display: block;
-}
-.main-image {
-  width: 260px;
-  margin: 70px auto 20px;
-  display: block;
-}
-.logo2 {
-  width: 100px;
-  left: 30px;
-  bottom: 30px;
-  position: absolute;
-}
-.logo1 {
-  width: 100px;
-  right: 30px;
-  bottom: 30px;
-  position: absolute;
-}
-.main-text {
-  text-align: center;
-  font-size: 25px;
-  line-height: 30px;
-  width: 80%;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  margin: 0 auto;
-}
-.section-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 30px;
-  font-weight: bold;
-  line-height: 33px;
-  margin-bottom: 15px;
-}
-.section-text {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 18px;
-  font-weight: 200;
-}
-.section-image {
-  width: 70%;
-  display: block;
-  margin: 10px auto;
-}
-.section {
-  margin-bottom: 40px;
-}
-</style>
+]

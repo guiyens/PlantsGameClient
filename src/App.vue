@@ -43,26 +43,31 @@ socket.on('closedGame', function () {
 
 <template>
   <main>
-    <p v-if="error">{{ error }}</p>
-    <div v-if="!error">
-      <div v-if="!nameConnected">
-        Nombre: <input type="text" v-model="name" />
-        <button @click="addUser">Enviar</button>
+    <div v-if="false">
+      <p v-if="error">{{ error }}</p>
+      <div v-if="!error">
+        <div v-if="!nameConnected">
+          Nombre: <input type="text" v-model="name" />
+          <button @click="addUser">Enviar</button>
+        </div>
+        <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
+        <div v-if="nameConnected">
+          <div>Socket id: {{ socketId }}</div>
+          <div>User name: {{ nameConnected }}</div>
+        </div>
+        <div v-if="game.state === StateEnum.STARTED">
+          {{ nameConnected }} <strong v-if="game.userActive !== socketId">no</strong> es tu turno
+          <button v-if="game.userActive === socketId" @click="nextTurn()">Pasar turno</button>
+        </div>
       </div>
-      <h2 v-if="nameConnected && game.state === StateEnum.WAITING">Esperando a más jugadores</h2>
-      <div v-if="nameConnected">
-        <div>Socket id: {{ socketId }}</div>
-        <div>User name: {{ nameConnected }}</div>
-      </div>
-      <div v-if="game.state === StateEnum.STARTED">
-        {{ nameConnected }} <strong v-if="game.userActive !== socketId">no</strong> es tu turno
-        <button v-if="game.userActive === socketId" @click="nextTurn()">Pasar turno</button>
+      <div class="cards-container" v-if="game.cardDeck?.cards?.length">
+        <div class="card" v-for="card in game.cardDeck.cards" :key="card.id">
+          {{ card.type.replace('_', ' ') }}
+        </div>
       </div>
     </div>
-    <div class="cards-container" v-if="game.cardDeck?.cards?.length">
-      <div class="card" v-for="card in game.cardDeck.cards" :key="card.id">
-        {{ card.type.replace('_', ' ') }}
-      </div>
+    <div v-if="true">
+      <router-view></router-view>
     </div>
   </main>
 </template>
