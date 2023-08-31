@@ -3,14 +3,23 @@ import { ref } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 
-//var socket = io('http://localhost:3000', { transports: ['websocket'] })
-var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
+var socket = io('http://localhost:3000', { transports: ['websocket'] })
+//var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
 
 const name = ref('')
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
+const block = ref(true)
+const clicks = ref(0)
+
+function unBlock() {
+  clicks.value++
+  if (clicks.value >= 5) {
+    block.value = false
+  }
+}
 
 function addUser() {
   socket.emit('addUser', name.value)
@@ -43,7 +52,7 @@ socket.on('closedGame', function () {
 
 <template>
   <main>
-    <div v-if="false">
+    <div v-if="!block">
       <p v-if="error">{{ error }}</p>
       <div v-if="!error">
         <div v-if="!nameConnected">
@@ -62,11 +71,12 @@ socket.on('closedGame', function () {
       </div>
       <div class="cards-container" v-if="game.cardDeck?.cards?.length">
         <div class="card" v-for="card in game.cardDeck.cards" :key="card.id">
-          {{ card.type.replace('_', ' ') }}
+          <img :src="`src/assets/images/cards/${card.image}`" alt="" />
         </div>
       </div>
     </div>
-    <div v-if="true">
+    <div v-if="block">
+      <div class="easter-egg" @click="unBlock"></div>
       <router-view></router-view>
     </div>
   </main>
@@ -82,8 +92,18 @@ socket.on('closedGame', function () {
 .card {
   border: 1px solid #333;
   width: 150px;
-  height: 200px;
   text-align: center;
-  padding: 80px 10px 10px;
+}
+
+.card img {
+  width: 100%;
+}
+.easter-egg {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
 }
 </style>
