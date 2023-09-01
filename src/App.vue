@@ -2,16 +2,17 @@
 import { ref } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
+import type { ICard } from './Infertaces/ICard'
 
-//var socket = io('http://localhost:3000', { transports: ['websocket'] })
-var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
+var socket = io('http://localhost:3000', { transports: ['websocket'] })
+//var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
 
 const name = ref('')
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const block = ref(true)
+const block = ref(false)
 const clicks = ref(0)
 
 function unBlock() {
@@ -19,6 +20,11 @@ function unBlock() {
   if (clicks.value >= 5) {
     block.value = false
   }
+}
+
+function getImage(card: ICard) {
+  const url = new URL(`/src/assets/images/cards/${card.image}`, import.meta.url).href
+  return url
 }
 
 function addUser() {
@@ -71,7 +77,7 @@ socket.on('closedGame', function () {
       </div>
       <div class="cards-container" v-if="game.cardDeck?.cards?.length">
         <div class="card" v-for="card in game.cardDeck.cards" :key="card.id">
-          <img :src="`src/assets/images/cards/${card.image}`" alt="" />
+          <img :src="getImage(card)" />
         </div>
       </div>
     </div>
