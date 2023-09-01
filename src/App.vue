@@ -12,7 +12,7 @@ const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const block = ref(false)
+const block = ref(true)
 const clicks = ref(0)
 
 function unBlock() {
