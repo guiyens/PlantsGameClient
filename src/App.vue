@@ -63,6 +63,10 @@ socket.on('closedGame', function () {
 socket.on('startedGame', function () {
   error.value = 'El juego ya ha comenzado'
 })
+
+socket.on('winnerGame', function () {
+  error.value = 'El juego ha terminado, HAS GANADO!!!!'
+})
 </script>
 
 <template>
