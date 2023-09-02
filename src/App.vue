@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import type { ICard } from './Infertaces/ICard'
+import type { Player } from './models/Player'
 
 //var socket = io('http://localhost:3000', { transports: ['websocket'] })
 var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
@@ -14,6 +15,10 @@ const error = ref('')
 const game: any = ref({})
 const block = ref(true)
 const clicks = ref(0)
+
+const player = computed(() => {
+  return game.value.players?.find((player: Player) => player.socketId === socketId.value)
+})
 
 function unBlock() {
   clicks.value++
@@ -75,8 +80,8 @@ socket.on('closedGame', function () {
           <button v-if="game.userActive === socketId" @click="nextTurn()">Pasar turno</button>
         </div>
       </div>
-      <div class="cards-container" v-if="game.cardDeck?.cards?.length">
-        <div class="card" v-for="card in game.cardDeck.cards" :key="card.id">
+      <div class="cards-container" v-if="player?.cards?.length">
+        <div class="card" v-for="card in player.cards" :key="card.id">
           <img :src="getImage(card)" />
         </div>
       </div>

@@ -5,10 +5,12 @@ export class Player implements IPlayer {
   socketId: string
   name: string
   cards: Array<ICard>
+  flowerCards: Array<ICard>
 
   constructor(socketId: string, name: string) {
     this.socketId = socketId
     this.name = name
     this.cards = []
+    this.flowerCards = []
   }
 }

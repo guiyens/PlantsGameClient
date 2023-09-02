@@ -4,4 +4,5 @@ export interface IPlayer {
   socketId: string
   name: string
   cards: Array<ICard>
+  flowerCards: Array<ICard>
 }
