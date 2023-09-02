@@ -59,6 +59,10 @@ socket.on('updateGame', function (newGame: IGame) {
 socket.on('closedGame', function () {
   error.value = 'No se permiten más jugadores'
 })
+
+socket.on('startedGame', function () {
+  error.value = 'El juego ya ha comenzado'
+})
 </script>
 
 <template>
