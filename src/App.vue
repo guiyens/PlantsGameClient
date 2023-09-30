@@ -234,29 +234,29 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                   v-for="(card, index) in player.crop.dictionary['EXTRES']"
                   v-bind:key="index"
                 >
-                  <img :src="getImage(card)" />
+                  <img :src="getImage(card as ICard)" />
                 </div>
               </div>
               <div class="crop__container crop__container--treatements">
                 <div
                   class="crop__treatements card"
-                  :class="{ 'card--bordered': !getImage(card) }"
+                  :class="{ 'card--bordered': !getImage(card as ICard) }"
                   v-for="(card, index) in player.crop.dictionary['TREATMENT']"
                   v-bind:key="index"
                 >
-                  <img :src="getImage(card)" />
+                  <img :src="getImage(card as ICard)" />
                 </div>
               </div>
               <div class="crop__container crop__container--inductingConditions">
                 <div
                   class="crop__inductingConditions card"
                   :class="{
-                    'card--bordered': !getImage(card)
+                    'card--bordered': !getImage(card as ICard)
                   }"
                   v-for="(card, index) in player.crop.dictionary['INDUCTING_CONDITION']"
                   v-bind:key="index"
                 >
-                  <img :src="getImage(card)" />
+                  <img :src="getImage(card as ICard)" />
                 </div>
               </div>
               <div class="crop__container crop__container--flower">
@@ -265,7 +265,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                   v-for="(card, index) in player.crop.dictionary['FLOWER']"
                   v-bind:key="index"
                 >
-                  <img :src="getImage(card)" />
+                  <img :src="getImage(card as ICard)" />
                 </div>
               </div>
               <div class="crop__container crop__container--fruit">
@@ -274,8 +274,8 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                   v-for="(card, index) in player.crop.dictionary['FRUIT']"
                   v-bind:key="index"
                 >
-                  <div :class="{ 'card--bordered': !getImage(card) }">
-                    <img :src="getImage(card)" />
+                  <div :class="{ 'card--bordered': !getImage(card as ICard) }">
+                    <img :src="getImage(card as ICard)" />
                   </div>
                 </div>
               </div>
@@ -334,7 +334,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
               }"
               :key="index"
             >
-              <img :src="getImage(card)" @click="selectCard(card)" />
+              <img :src="getImage(card as ICard)" @click="selectCard(card)" />
             </div>
           </div>
           <div
@@ -362,39 +362,39 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                 v-for="(card, index) in playerCrop.dictionary['EXTRES']"
                 v-bind:key="index"
               >
-                <img :src="getImage(card)" />
+                <img :src="getImage(card as ICard)" />
               </div>
             </div>
             <div class="crop__container crop__container--treatements">
               <div
                 class="crop__treatements card"
-                :class="{ 'card--bordered': !getImage(card) }"
+                :class="{ 'card--bordered': !getImage(card as ICard) }"
                 v-for="(card, index) in playerCrop.dictionary['TREATMENT']"
                 v-bind:key="index"
               >
-                <img :src="getImage(card)" />
+                <img :src="getImage(card as ICard)" />
               </div>
             </div>
             <div class="crop__container crop__container--inductingConditions">
               <div
                 class="crop__inductingConditions card"
                 :class="{
-                  'card--bordered': !getImage(card)
+                  'card--bordered': !getImage(card as ICard)
                 }"
                 v-for="(card, index) in playerCrop.dictionary['INDUCTING_CONDITION']"
                 v-bind:key="index"
               >
-                <img :src="getImage(card)" />
+                <img :src="getImage(card as ICard)" />
               </div>
             </div>
             <div class="crop__container crop__container--flower">
               <div
                 class="crop__flower card"
-                :class="{ 'card--bordered': !getImage(card) }"
+                :class="{ 'card--bordered': !getImage(card as ICard) }"
                 v-for="(card, index) in playerCrop.dictionary['FLOWER']"
                 v-bind:key="index"
               >
-                <img :src="getImage(card)" />
+                <img :src="getImage(card as ICard)" />
               </div>
             </div>
             <div class="crop__container crop__container--fruit">
@@ -403,8 +403,8 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                 v-for="(card, index) in playerCrop.dictionary['FRUIT']"
                 v-bind:key="index"
               >
-                <div :class="{ 'card--bordered': !getImage(card) }">
-                  <img :src="getImage(card)" />
+                <div :class="{ 'card--bordered': !getImage(card as ICard) }">
+                  <img :src="getImage(card as ICard)" />
                 </div>
               </div>
             </div>
@@ -418,7 +418,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
               v-for="card in wilcardToCards.cards"
               :key="card.id"
             >
-              <img :src="getImage(card)" @click="sendWildCard(card)" />
+              <img :src="getImage(card as ICard)" @click="sendWildCard(card)" />
             </div>
           </div>
         </div>
