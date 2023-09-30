@@ -5,7 +5,7 @@ import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import { EGroup, type ICard } from './Infertaces/ICard'
 import type { IPlayer } from './Infertaces/IPlayer'
 import type { ICrop } from './Infertaces/ICrop'
-import { wilcardToCards } from './config/wilcardToCards.js'
+import wilcardToCards from './config/wilcardToCards.json'
 
 //var socket = io('http://localhost:3000', { transports: ['websocket'] })
 var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
@@ -413,7 +413,11 @@ socket.on('winnerGame', function (winnerSocketId: string) {
         <div class="wildcardSelection__panel" v-if="isSelectionCardFromWildcard">
           <h4>Selecciona la carta por la que quieres cambiar el comidín</h4>
           <div class="wildcardSelection__cards">
-            <div class="wildcardSelection__card card" v-for="card in wilcardToCards" :key="card.id">
+            <div
+              class="wildcardSelection__card card"
+              v-for="card in wilcardToCards.cards"
+              :key="card.id"
+            >
               <img :src="getImage(card)" @click="sendWildCard(card)" />
             </div>
           </div>

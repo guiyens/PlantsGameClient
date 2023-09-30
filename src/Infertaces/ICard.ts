@@ -1,9 +1,10 @@
 export interface ICard {
   id: string
-  type: ECard
+  type: ECard | string
   image: string
-  isSelected: boolean
-  group: EGroup
+  isSelected?: boolean
+  group: EGroup | string
+  isWildCardOrigin?: boolean
 }
 
 export enum ECard {
