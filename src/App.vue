@@ -7,15 +7,15 @@ import type { IPlayer } from './Infertaces/IPlayer'
 import type { ICrop } from './Infertaces/ICrop'
 import wilcardToCards from './config/wilcardToCards.json'
 
-var socket = io('http://localhost:3000', { transports: ['websocket'] })
-//var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
+//var socket = io('http://localhost:3000', { transports: ['websocket'] })
+var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
 
 const name = ref('')
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const block = ref(false)
+const block = ref(true)
 const clicks = ref(0)
 const isSelectionActiveToDiscard = ref(false)
 const selectedCardsToDiscard: Ref<Array<ICard>> = ref([])
