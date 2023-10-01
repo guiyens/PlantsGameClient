@@ -28,11 +28,17 @@ const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
-  return game.value.players?.find((player: IPlayer) => player.socketId === socketId.value).cards
+  const playerFound = game.value.players?.find(
+    (player: IPlayer) => player.socketId === socketId.value
+  )
+  return playerFound?.cards
 })
 
 const playerCrop: ComputedRef<ICrop> = computed(() => {
-  return game.value.players?.find((player: IPlayer) => player.socketId === socketId.value).crop
+  const playerFound = game.value.players?.find(
+    (player: IPlayer) => player.socketId === socketId.value
+  )
+  return playerFound?.crop
 })
 
 function unBlock() {
