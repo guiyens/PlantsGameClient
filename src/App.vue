@@ -7,15 +7,15 @@ import type { IPlayer } from './Infertaces/IPlayer'
 import type { ICrop } from './Infertaces/ICrop'
 import wilcardToCards from './config/wilcardToCards.json'
 
-//var socket = io('http://localhost:3000', { transports: ['websocket'] })
-var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
+var socket = io('http://localhost:3000', { transports: ['websocket'] })
+//var socket = io('https://plantsgameserver.onrender.com', { transports: ['websocket'] })
 
 const name = ref('')
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const block = ref(true)
+const block = ref(false)
 const clicks = ref(0)
 const isSelectionActiveToDiscard = ref(false)
 const selectedCardsToDiscard: Ref<Array<ICard>> = ref([])
@@ -49,11 +49,35 @@ function unBlock() {
 }
 
 function getImage(card: ICard) {
-  if (card) {
+  if (card && card.type) {
     const newUrl = new URL(`/src/assets/images/cards/${card.image}`, import.meta.url)
     const url = newUrl?.href
     return url
   }
+}
+
+function isCardPlayable(card: ICard): boolean {
+  if (card.group === 'INDUCTING_CONDITION' || card.group === 'TREATMENT') {
+    if (!(playerCrop.value.dictionary[card.group] as Array<ICard>).length) {
+      return true
+    }
+    return !(playerCrop.value.dictionary[card.group] as Array<ICard>)!.some(
+      (cardInCrop: ICard) => card.type === cardInCrop.type
+    )
+  }
+  if (card.group === 'VEGETETIVE_ORGAN') {
+    if (!(playerCrop.value.dictionary[card.type] as ICard).type) {
+      return true
+    }
+    return (playerCrop.value.dictionary[card.type] as ICard).type !== card.type
+  }
+  return true
+}
+
+function isExtresSettableOnPlayer(player: IPlayer): boolean {
+  return !(player.crop.dictionary[EGroup.EXTRES] as Array<ICard>).some(
+    (card: ICard) => card.type === selectedExtresCardToPlay.value?.type
+  )
 }
 
 function addUser() {
@@ -113,10 +137,14 @@ function selectCardsToDiscard(card: ICard) {
   }
 }
 
-function cancelDisscard() {
+function cancel() {
   selectedCardsToDiscard.value = []
   isSelectionActiveToDiscard.value = false
   isSelectionActiveToPlay.value = false
+  isSelectionActiveChoosePlayer.value = false
+  isSelectionCardFromWildcard.value = false
+  selectedExtresCardToPlay.value = undefined
+  selectedWildcardToChange.value = undefined
 }
 
 function sendDisscards() {
@@ -165,8 +193,6 @@ socket.on('alreadyAddedUser', function () {
 })
 
 socket.on('updateGame', function (newGame: IGame) {
-  console.log('players', newGame.players.length)
-  console.log('Game state', newGame.state)
   game.value = newGame
 })
 
@@ -198,7 +224,6 @@ socket.on('winnerGame', function (winnerSocketId: string) {
             Nombre: <input type="text" v-model="name" />
             <button @click="addUser">Enviar</button>
           </div>
-          nameConnected: {{ nameConnected }} / state waiting: {{ game.state === StateEnum.WAITING }}
           <h2 v-if="nameConnected && game.state === StateEnum.WAITING">
             Esperando a más jugadores
           </h2>
@@ -213,7 +238,11 @@ socket.on('winnerGame', function (winnerSocketId: string) {
           >
             <h1
               style="text-align: center"
-              :class="{ 'player-cards--selecting': isSelectionActiveChoosePlayer }"
+              :class="{
+                'player-cards--selecting': isSelectionActiveChoosePlayer,
+                'player-cards--disabled':
+                  isSelectionActiveChoosePlayer && !isExtresSettableOnPlayer(player)
+              }"
               @click="selectPlayer(player)"
             >
               {{ player.name }}
@@ -299,7 +328,9 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                 v-if="
                   game.userActive === socketId &&
                   !isSelectionActiveToDiscard &&
-                  !isSelectionActiveToPlay
+                  !isSelectionActiveToPlay &&
+                  !isSelectionActiveChoosePlayer &&
+                  !isSelectionCardFromWildcard
                 "
                 @click="disscard"
               >
@@ -309,7 +340,9 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                 v-if="
                   game.userActive === socketId &&
                   !isSelectionActiveToDiscard &&
-                  !isSelectionActiveToPlay
+                  !isSelectionActiveToPlay &&
+                  !isSelectionActiveChoosePlayer &&
+                  !isSelectionCardFromWildcard
                 "
                 @click="playCard"
               >
@@ -317,14 +350,18 @@ socket.on('winnerGame', function (winnerSocketId: string) {
               </button>
               <div v-if="game.userActive === socketId && isSelectionActiveToDiscard">
                 <p>Selecciona las cartas que quieres descarter y confirma</p>
-                <button @click="cancelDisscard">Cancelar</button>
+                <button @click="cancel">Cancelar</button>
                 <button :disabled="selectedCardsToDiscard.length === 0" @click="sendDisscards">
                   Confirmar
                 </button>
               </div>
               <div v-if="game.userActive === socketId && isSelectionActiveToPlay">
-                <button @click="cancelDisscard">Cancelar</button>
+                <button @click="cancel">Cancelar</button>
                 Selecciona la carta que quieres jugar
+              </div>
+              <div v-if="game.userActive === socketId && isSelectionActiveChoosePlayer">
+                <button @click="cancel">Cancelar</button>
+                Selecciona un jugador para aplicarle la carta de estres
               </div>
             </div>
           </div>
@@ -336,7 +373,8 @@ socket.on('winnerGame', function (winnerSocketId: string) {
                 'player-cards--selecting': isSelectionActiveToDiscard || isSelectionActiveToPlay,
                 'player-cards--selected': selectedCardsToDiscard.some(
                   (cardAdded) => card.id === cardAdded.id
-                )
+                ),
+                'player-cards--disabled': isSelectionActiveToPlay && !isCardPlayable(card)
               }"
               :key="index"
             >
@@ -426,6 +464,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
             >
               <img :src="getImage(card as ICard)" @click="sendWildCard(card)" />
             </div>
+            <button @click="cancel">Cancelar</button>
           </div>
         </div>
       </div>
@@ -464,6 +503,11 @@ socket.on('winnerGame', function (winnerSocketId: string) {
 .card.player-cards--selected {
   border: 3px solid green;
   margin-top: -10px;
+}
+.player-cards--disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  border: none;
 }
 .crop {
   display: flex;
