@@ -6,9 +6,10 @@ import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import router from './router'
 
-window.addEventListener('beforeunload', function (event) {
-  event.returnValue = 'Write something'
-  console.log('asdad')
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault()
+  event.returnValue = 'Si sales abandonaras la partida'
+  alert('hello')
 })
 
 const app = createApp(App)
