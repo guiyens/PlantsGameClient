@@ -15,7 +15,7 @@ const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const block = ref(true)
+const block = ref(false)
 const clicks = ref(0)
 const isSelectionActiveToDiscard = ref(false)
 const selectedCardsToDiscard: Ref<Array<ICard>> = ref([])
@@ -26,6 +26,8 @@ const gameEnded = ref(false)
 const gameEndedMessage = ref('')
 const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
+const isSpecialCardFound = ref(false)
+const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -180,6 +182,11 @@ function sendWildCard(card: ICard) {
   selectedWildcardToChange.value = undefined
 }
 
+function closeSpecialCardPanel() {
+  isSpecialCardFound.value = false
+  SpecialCardFound.value = undefined
+}
+
 socket.on('addedUser', function (name: string) {
   nameConnected.value = name
 })
@@ -202,6 +209,12 @@ socket.on('closedGame', function () {
 
 socket.on('startedGame', function () {
   error.value = 'El juego ya ha comenzado'
+})
+
+socket.on('SpecialCardFound', function (specialCardInfo: { newGame: IGame; specialCard: ICard }) {
+  isSpecialCardFound.value = true
+  SpecialCardFound.value = specialCardInfo.specialCard
+  game.value = specialCardInfo.newGame
 })
 
 socket.on('winnerGame', function (winnerSocketId: string) {
@@ -467,6 +480,22 @@ socket.on('winnerGame', function (winnerSocketId: string) {
             <button @click="cancel">Cancelar</button>
           </div>
         </div>
+        <div class="specialCard__panel" v-if="isSpecialCardFound">
+          <h4 class="specialCard__title">Se ha encontrado una carta Especial</h4>
+          <img class="specialCard__image" :src="getImage(SpecialCardFound as ICard)" />
+          <p class="specialCard__text" v-if="SpecialCardFound?.type === 'CROP_ROTATION'">
+            Todos los jugadores rotan su cultivo al adversario situado a su derecha. Todas las
+            cartas salvo los frutos cosechados.
+          </p>
+          <p class="specialCard__text" v-if="SpecialCardFound?.type === 'DISASTER'">
+            Se han eliminado las flores que todos los jugadores tenían en sus cultivos
+          </p>
+          <p class="specialCard__text" v-if="SpecialCardFound?.type === 'RELAXED_SEASON'">
+            Todas las cartes destrés que los jugadores tenían en sus cultivos se han mandado al mazo
+            de descartes
+          </p>
+          <button class="specialCard__button" @click="closeSpecialCardPanel()">Cerrar</button>
+        </div>
       </div>
       <div class="gameEndedPanel" v-if="gameEnded">
         <h2 class="gameEndedPanel__text">{{ gameEndedMessage }}</h2>
@@ -586,7 +615,8 @@ socket.on('winnerGame', function (winnerSocketId: string) {
   font-size: 40px;
 }
 
-.wildcardSelection__panel {
+.wildcardSelection__panel,
+.specialCard__panel {
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -594,6 +624,26 @@ socket.on('winnerGame', function (winnerSocketId: string) {
   left: 0;
   z-index: 100;
   background-color: #fff;
+}
+.specialCard__title {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 30px;
+}
+.specialCard__image {
+  width: 200px;
+  display: block;
+  margin: 30px auto 0;
+}
+.specialCard__text {
+  font-size: 15px;
+  text-align: center;
+  margin: 30px auto 0;
+  width: 500px;
+}
+.specialCard__button {
+  display: block;
+  margin: 20px auto 0;
 }
 .wildcardSelection__cards {
   display: flex;
