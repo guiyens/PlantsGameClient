@@ -109,9 +109,9 @@ const texts = ref([
         PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de
         fisiología y producción vegetal de manera entretenida.
       </p>
-      <button class="play-button" onclick="alert('Para jugar contacta con el administrador')">
-        Jugar
-      </button>
+      <router-link to="/game">
+        <button>Jugar</button>
+      </router-link>
       <img class="logo2" src="@/assets/images/logo2.png" alt="" />
       <img class="logo1" src="@/assets/images/logo1.png" alt="" />
     </div>
