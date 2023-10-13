@@ -110,7 +110,7 @@ const texts = ref([
         fisiología y producción vegetal de manera entretenida.
       </p>
       <router-link to="/game">
-        <button>Jugar</button>
+        <button class="play-button">Jugar</button>
       </router-link>
       <img class="logo2" src="@/assets/images/logo2.png" alt="" />
       <img class="logo1" src="@/assets/images/logo1.png" alt="" />
