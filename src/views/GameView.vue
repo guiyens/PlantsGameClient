@@ -157,11 +157,15 @@ function closeSpecialCardPanel() {
   SpecialCardFound.value = undefined
 }
 
-async function setCode(code: string) {
+function setCode(code: string) {
   isUserValid.value = code === 'Pl4nt4'
   if (!(code === 'Pl4nt4')) {
     errorNotValid.value = '¡El codigo no es valido!'
   }
+}
+
+function startGameNow() {
+  socket.emit('startGame')
 }
 
 socket.on('addedUser', function (name: string) {
@@ -216,8 +220,10 @@ socket.on('winnerGame', function (winnerSocketId: string) {
         :gameState="game.state"
         :isUserValid="isUserValid"
         :errorNotValid="errorNotValid"
+        :players="game.players"
         @addUser="addUser"
         @setCode="setCode"
+        @startGame="startGameNow"
       ></InitialPanel>
       <!--======== Players-other =========-->
       <div v-if="nameConnected && game.state === StateEnum.STARTED">
