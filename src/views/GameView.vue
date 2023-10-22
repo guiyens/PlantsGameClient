@@ -12,8 +12,8 @@ import SpecialCardPanel from '@/components/SpecialCardPanel.vue'
 import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
-//const url = 'https://plantsgameserver.onrender.com'
-const url = 'http://localhost:3000'
+const url = 'https://plantsgameserver.onrender.com'
+//const url = 'http://localhost:3000'
 
 var socket = io(url, { transports: ['websocket'] })
 
@@ -33,7 +33,7 @@ const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 const isSpecialCardFound = ref(false)
 const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
-const isUserValid = ref(true)
+const isUserValid = ref(false)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
 
