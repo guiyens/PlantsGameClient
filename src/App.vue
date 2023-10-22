@@ -50,27 +50,4 @@ import GameView from '@/views/GameView.vue'
   top: 0;
   z-index: 1000;
 }
-.players-other:nth-of-type(1) {
-  transform: rotate(270deg) translateY(-50%);
-  position: absolute;
-  right: -220px;
-  top: 39%;
-}
-.players-other:nth-of-type(2) {
-  transform: rotate(180deg) translateX(-50%);
-  position: absolute;
-  top: 20px;
-}
-.players-other:nth-of-type(3) {
-  transform: rotate(90deg) translateY(-50%);
-  position: absolute;
-  left: -220px;
-  top: 39%;
-}
-.player {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-}
 </style>

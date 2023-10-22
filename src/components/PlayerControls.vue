@@ -10,7 +10,6 @@ const props = defineProps({
   isSelectionCardFromWildcard: Boolean,
   selectedCardsToDiscard: Array<ICard>,
   gameState: Number,
-  nameConnected: String,
   userActive: String,
   socketId: String
 })
@@ -18,49 +17,69 @@ const props = defineProps({
 
 <template>
   <!--div>Socket id: {{ socketId }}</div-->
-  <h1 style="text-align: center">{{ nameConnected }}</h1>
-  <div v-if="gameState === StateEnum.STARTED">
-    {{ nameConnected }} <strong v-if="userActive !== socketId">no</strong> es tu turno
+  <div class="actions" v-if="gameState === StateEnum.STARTED">
     <button
       v-if="
-        userActive === socketId &&
         !isSelectionActiveToDiscard &&
         !isSelectionActiveToPlay &&
         !isSelectionActiveChoosePlayer &&
         !isSelectionCardFromWildcard
       "
       @click="$emit('disscard')"
+      :disabled="userActive !== socketId"
+      class="action"
     >
       Descartar
     </button>
     <button
       v-if="
-        userActive === socketId &&
         !isSelectionActiveToDiscard &&
         !isSelectionActiveToPlay &&
         !isSelectionActiveChoosePlayer &&
         !isSelectionCardFromWildcard
       "
       @click="$emit('playCard')"
+      :disabled="userActive !== socketId"
+      class="action"
     >
       Jugar carta
     </button>
     <div v-if="userActive === socketId && isSelectionActiveToDiscard">
       <p>Selecciona las cartas que quieres descarter y confirma</p>
-      <button @click="$emit('cancel')">Cancelar</button>
-      <button :disabled="selectedCardsToDiscard!.length === 0" @click="$emit('sendDisscards')">
+      <button class="action" @click="$emit('cancel')">Cancelar</button>
+      <button
+        :disabled="selectedCardsToDiscard!.length === 0"
+        @click="$emit('sendDisscards')"
+        class="action"
+      >
         Confirmar
       </button>
     </div>
     <div v-if="userActive === socketId && isSelectionActiveToPlay">
-      <button @click="$emit('cancel')">Cancelar</button>
+      <button class="action" @click="$emit('cancel')">Cancelar</button>
       Selecciona la carta que quieres jugar
     </div>
     <div v-if="userActive === socketId && isSelectionActiveChoosePlayer">
-      <button @click="$emit('cancel')">Cancelar</button>
+      <button class="action" @click="$emit('cancel')">Cancelar</button>
       Selecciona un jugador para aplicarle la carta de estres
     </div>
   </div>
 </template>
 
-<style></style>
+<style>
+.username {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-top: 10px;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+}
+.action {
+  flex-grow: 1;
+  padding: 5px 10px;
+  font-size: 15px;
+}
+</style>

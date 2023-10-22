@@ -1,18 +1,62 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import type { ICard } from '@/Infertaces/ICard'
+import { type PropType, toRefs } from 'vue'
+import { type ICard, EGroup } from '@/Infertaces/ICard'
 import { StateEnum } from '@/Infertaces/IGame'
 import type { ICrop } from '@/Infertaces/ICrop'
-import { getImage } from '@/utils/getImage'
+import { getImage, getImageNocard } from '@/utils/getImage'
+import { elements } from '@/config/elementsImagesNames'
 
 const props = defineProps({
   playerCrop: Object as PropType<ICrop>,
   gameState: Object as PropType<StateEnum>
 })
+
+const { playerCrop } = toRefs(props)
+
+function isElementActive(element: string, type: string) {
+  if (!playerCrop?.value || element === 'INSECTICIDE2') {
+    return false
+  }
+  if (type === EGroup.VEGETETIVE_ORGAN) {
+    return !!(playerCrop.value.dictionary[element] as ICard).id
+  }
+
+  if (type === EGroup.EXTRES || type === EGroup.INDUCTING_CONDITION || type === EGroup.TREATMENT) {
+    return (playerCrop.value.dictionary[type] as Array<ICard>).some((card) => card.type === element)
+  }
+
+  if (
+    (type === EGroup.FRUIT && element === 'FRUIT') ||
+    (type === EGroup.FLOWER && element === 'FLOWER')
+  ) {
+    return (playerCrop.value.dictionary[type] as Array<ICard>).length > 0
+  }
+
+  if (
+    (type === EGroup.FRUIT && element === 'FRUIT2') ||
+    (type === EGroup.FLOWER && element === 'FLOWER2')
+  ) {
+    return (playerCrop.value.dictionary[type] as Array<ICard>).length > 1
+  }
+
+  return false
+}
 </script>
 
 <template>
   <div class="crop" v-if="playerCrop && playerCrop.dictionary && gameState !== StateEnum.WAITING">
+    <div class="crop-elements">
+      <img
+        class="crop-element"
+        v-for="element in Object.keys(elements)"
+        :src="getImageNocard(elements[element].name)"
+        :key="element"
+        :class="{ 'crop-element--active': isElementActive(element, elements[element].type) }"
+        alt=""
+      />
+    </div>
+  </div>
+  <!-- <div class="crop" v-if="playerCrop && playerCrop.dictionary && gameState !== StateEnum.WAITING">
     <div class="crop__container">
       <div class="crop__root card">
         <img :src="getImage(playerCrop.dictionary['ROOT'] as ICard)" />
@@ -80,13 +124,12 @@ const props = defineProps({
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style>
 .crop {
   display: flex;
-  margin-top: 20px;
   justify-content: center;
 }
 .crop__container {
@@ -116,5 +159,23 @@ const props = defineProps({
 .crop__container--fruit {
   width: 100px;
   background-color: red;
+}
+.crop-elements {
+  position: relative;
+  width: 360px;
+  height: 467px;
+  overflow: hidden;
+  background: url('src/assets/images/game_elements/Fondo.png') center 32%;
+}
+
+.crop-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+.crop-element--active {
+  opacity: 1;
 }
 </style>
