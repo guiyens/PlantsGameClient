@@ -36,6 +36,7 @@ const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
 const isUserValid = ref(false)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
+const userDisplayed = ref('')
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -172,6 +173,10 @@ function startGameNow() {
   socket.emit('startGame')
 }
 
+function displayPlayer(playerId: string): void {
+  userDisplayed.value = playerId
+}
+
 socket.on('connect', function () {
   isServerConnected.value = true
   isUserValid.value = false
@@ -197,6 +202,7 @@ socket.on('alreadyAddedUser', function () {
 
 socket.on('updateGame', function (newGame: IGame) {
   game.value = newGame
+  userDisplayed.value = game.value.userActive
 })
 
 socket.on('closedGame', function () {
@@ -231,7 +237,7 @@ socket.on('reconnect', (attempt) => {
 </script>
 
 <template>
-  <main>
+  <main class="main-container">
     <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
     <div v-if="!gameEnded">
       <!-- Error =========-->
@@ -249,12 +255,24 @@ socket.on('reconnect', (attempt) => {
         @setCode="setCode"
         @startGame="startGameNow"
       ></InitialPanel>
+      <!--======== Players Selector =========-->
+      <div class="players-selector">
+        <div
+          class="player-selector"
+          @click="displayPlayer(player.socketId)"
+          v-for="player in game.players"
+          :key="player.socketId"
+          :class="{ 'player-selector--active': player.socketId === userDisplayed }"
+        >
+          {{ player.socketId === socketId ? 'Yo' : player.name }}
+        </div>
+      </div>
       <!--======== Players-other =========-->
       <div v-if="nameConnected && game.state === StateEnum.STARTED">
         <div
           class="players-other"
           v-for="(player, index) in game.players.filter(
-            (player: IPlayer) => player.socketId !== socketId
+            (player: IPlayer) => player.socketId !== socketId && player.socketId === userDisplayed
           )"
           :key="index"
         >
@@ -277,23 +295,8 @@ socket.on('reconnect', (attempt) => {
         </div>
       </div>
       <!--========Player =========-->
-      <div class="player">
-        <PlayerControls
-          v-if="nameConnected && game.state === StateEnum.STARTED"
-          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-          :isSelectionActiveToPlay="isSelectionActiveToPlay"
-          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
-          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
-          :selectedCardsToDiscard="selectedCardsToDiscard"
-          :gameState="game.state"
-          :nameConnected="nameConnected"
-          :userActive="game.userActive"
-          :socketId="socketId"
-          @disscard="disscard"
-          @playCard="playCard"
-          @cancel="cancel"
-          @sendDisscards="sendDisscards"
-        ></PlayerControls>
+      <div class="player" v-if="socketId === userDisplayed">
+        <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
         <PlayerCards
           :playerCards="playerCards"
           :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
@@ -302,7 +305,21 @@ socket.on('reconnect', (attempt) => {
           :playerCrop="playerCrop"
           @selectCard="selectCard"
         ></PlayerCards>
-        <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
+        <PlayerControls
+          v-if="nameConnected && game.state === StateEnum.STARTED"
+          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+          :isSelectionActiveToPlay="isSelectionActiveToPlay"
+          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
+          :selectedCardsToDiscard="selectedCardsToDiscard"
+          :gameState="game.state"
+          :userActive="game.userActive"
+          :socketId="socketId"
+          @disscard="disscard"
+          @playCard="playCard"
+          @cancel="cancel"
+          @sendDisscards="sendDisscards"
+        ></PlayerControls>
       </div>
       <!--======== wildcard Selection panel =========-->
       <WildCardSelectionPanel
@@ -324,6 +341,10 @@ socket.on('reconnect', (attempt) => {
 </template>
 
 <style>
+.main-container {
+  width: 360px;
+  margin: 0 auto;
+}
 .cards-container {
   display: flex;
   flex-direction: row;
@@ -337,7 +358,7 @@ socket.on('reconnect', (attempt) => {
   gap: 10px;
 }
 .card {
-  width: 92px;
+  width: 80px;
   text-align: center;
   height: 100%;
 }
@@ -365,28 +386,7 @@ socket.on('reconnect', (attempt) => {
   top: 0;
   z-index: 1000;
 }
-.players-other:nth-of-type(1) {
-  transform: rotate(270deg) translateY(-50%);
-  position: absolute;
-  right: -220px;
-  top: 39%;
-}
-.players-other:nth-of-type(2) {
-  transform: rotate(180deg) translateX(-50%);
-  position: absolute;
-  top: 20px;
-}
-.players-other:nth-of-type(3) {
-  transform: rotate(90deg) translateY(-50%);
-  position: absolute;
-  left: -220px;
-  top: 39%;
-}
 .player {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .server-flag {
   position: fixed;
@@ -399,5 +399,22 @@ socket.on('reconnect', (attempt) => {
 }
 .server-flag--connected {
   background-color: green;
+}
+.players-selector {
+  display: flex;
+  justify-content: center;
+}
+.player-selector {
+  border: 1px solid #676767;
+  color: #444;
+  padding: 5px 20px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: center;
+}
+.player-selector--active {
+  background-color: #444;
+  color: #fff;
+  font-weight: 700;
 }
 </style>
