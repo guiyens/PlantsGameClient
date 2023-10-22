@@ -12,8 +12,8 @@ import SpecialCardPanel from '@/components/SpecialCardPanel.vue'
 import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
-const url = 'https://plantsgameserver.onrender.com'
-//const url = 'http://localhost:3000'
+//const url = 'https://plantsgameserver.onrender.com'
+const url = 'http://localhost:3000'
 
 var socket = io(url, { transports: ['websocket'] })
 
@@ -33,8 +33,9 @@ const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 const isSpecialCardFound = ref(false)
 const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
-const isUserValid = ref(false)
+const isUserValid = ref(true)
 const errorNotValid = ref('')
+const isServerConnected = ref(false)
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -57,6 +58,9 @@ function isExtresSettableOnPlayer(player: IPlayer): boolean {
 }
 
 function addUser(name: string) {
+  if (name === '') {
+    return
+  }
   socket.emit('addUser', name)
 }
 
@@ -168,6 +172,15 @@ function startGameNow() {
   socket.emit('startGame')
 }
 
+socket.on('connect', function () {
+  isServerConnected.value = true
+})
+
+socket.on('disconnect', function () {
+  isServerConnected.value = false
+  game.value = {}
+})
+
 socket.on('addedUser', function (name: string) {
   nameConnected.value = name
 })
@@ -206,10 +219,18 @@ socket.on('winnerGame', function (winnerSocketId: string) {
       : 'El juego ha terminado, has perdido. El ganador ha sido ' +
         game.value.players.find((player: IPlayer) => player.socketId === winnerSocketId).name
 })
+
+socket.on('error', (err) => {
+  isServerConnected.value = false
+})
+socket.on('reconnect', (attempt) => {
+  isServerConnected.value = true
+})
 </script>
 
 <template>
   <main>
+    <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
     <div v-if="!gameEnded">
       <!-- Error =========-->
       <p v-if="error">{{ error }}</p>
@@ -221,6 +242,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
         :isUserValid="isUserValid"
         :errorNotValid="errorNotValid"
         :players="game.players"
+        :maxPlayers="game.maxPlayers"
         @addUser="addUser"
         @setCode="setCode"
         @startGame="startGameNow"
@@ -363,5 +385,17 @@ socket.on('winnerGame', function (winnerSocketId: string) {
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
+}
+.server-flag {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  top: 50px;
+  right: 50px;
+}
+.server-flag--connected {
+  background-color: green;
 }
 </style>

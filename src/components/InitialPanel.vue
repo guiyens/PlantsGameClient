@@ -10,7 +10,8 @@ const props = defineProps({
   gameState: Object as PropType<StateEnum>,
   isUserValid: Boolean,
   errorNotValid: String,
-  players: Array<IPlayer>
+  players: Array<IPlayer>,
+  maxPlayers: Number
 })
 
 const name = ref('')
@@ -46,7 +47,7 @@ const code = ref('')
       />
       <h2 class="inital-panel__title inital-panel__title--no-margin-top">
         ¡¡ Ya estas dentro {{ nameConnected }} !! Esperando a más jugadores ({{ players?.length }} /
-        X)
+        {{ maxPlayers }})
       </h2>
       <button
         v-if="!!players && players.length > 1"
