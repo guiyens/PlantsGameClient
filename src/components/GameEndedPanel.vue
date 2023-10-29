@@ -12,7 +12,8 @@ const props = defineProps({
 
 <template>
   <div class="gameEndedPanel">
-    <h2 class="gameEndedPanel__text">{{ gameEndedMessage }}</h2>
+    <p class="gameEndedPanel__icon">{{ gameEndedMessage?.includes('Ganado') ? '🏆' : '😞' }}</p>
+    <p class="gameEndedPanel__text">{{ gameEndedMessage }}</p>
   </div>
 </template>
 
@@ -20,10 +21,26 @@ const props = defineProps({
 .gameEndedPanel {
   width: 100vw;
   height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(224, 102, 102);
+}
+.gameEndedPanel--winner {
+  background-color: rgb(128, 249, 128);
 }
 .gameEndedPanel__text {
   text-align: center;
-  padding-top: 16%;
-  font-size: 40px;
+  font-size: 26px;
+  width: 70%;
+  margin: 20px auto;
+  color: #fff;
+}
+
+.gameEndedPanel__icon {
+  text-align: center;
+  font-size: 50px;
+  width: 90%;
+  margin: 100px auto 0;
 }
 </style>

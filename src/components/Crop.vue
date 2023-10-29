@@ -46,6 +46,20 @@ function isElementActive(element: string, type: string) {
 <template>
   <div class="crop" v-if="playerCrop && playerCrop.dictionary && gameState !== StateEnum.WAITING">
     <div class="crop-elements">
+      <div class="flowers-count">
+        {{(playerCrop.dictionary["FLOWER"] as Array<ICard>).length}} / 2
+          <img
+            class="flowers-count__image"
+            :src="getImageNocard('Flor.png')"
+          />
+      </div>
+      <div class="fruits-count">
+        {{(playerCrop.dictionary["FRUIT"] as Array<ICard>).length}} / 2
+          <img
+            class="fruits-count__image"
+            :src="getImageNocard('Fruto.png')"
+          />
+      </div>
       <img
         class="crop-element"
         v-for="element in Object.keys(elements)"
@@ -56,75 +70,6 @@ function isElementActive(element: string, type: string) {
       />
     </div>
   </div>
-  <!-- <div class="crop" v-if="playerCrop && playerCrop.dictionary && gameState !== StateEnum.WAITING">
-    <div class="crop__container">
-      <div class="crop__root card">
-        <img :src="getImage(playerCrop.dictionary['ROOT'] as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container">
-      <div class="crop__leave card">
-        <img :src="getImage(playerCrop.dictionary['LEAVE'] as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container">
-      <div class="crop__stem card">
-        <img :src="getImage(playerCrop.dictionary['STEM'] as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container crop__container--extres">
-      <div
-        class="crop__extres card"
-        v-for="(card, index) in playerCrop.dictionary['EXTRES']"
-        v-bind:key="index"
-      >
-        <img :src="getImage(card as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container crop__container--treatements">
-      <div
-        class="crop__treatements card"
-        :class="{ 'card--bordered': !getImage(card as ICard) }"
-        v-for="(card, index) in playerCrop.dictionary['TREATMENT']"
-        v-bind:key="index"
-      >
-        <img :src="getImage(card as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container crop__container--inductingConditions">
-      <div
-        class="crop__inductingConditions card"
-        :class="{
-          'card--bordered': !getImage(card as ICard)
-        }"
-        v-for="(card, index) in playerCrop.dictionary['INDUCTING_CONDITION']"
-        v-bind:key="index"
-      >
-        <img :src="getImage(card as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container crop__container--flower">
-      <div
-        class="crop__flower card"
-        :class="{ 'card--bordered': !getImage(card as ICard) }"
-        v-for="(card, index) in playerCrop.dictionary['FLOWER']"
-        v-bind:key="index"
-      >
-        <img :src="getImage(card as ICard)" />
-      </div>
-    </div>
-    <div class="crop__container crop__container--fruit">
-      <div
-        class="crop__fruit card"
-        v-for="(card, index) in playerCrop.dictionary['FRUIT']"
-        v-bind:key="index"
-      >
-        <div :class="{ 'card--bordered': !getImage(card as ICard) }">
-          <img :src="getImage(card as ICard)" />
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <style>
@@ -162,20 +107,46 @@ function isElementActive(element: string, type: string) {
 }
 .crop-elements {
   position: relative;
-  width: 360px;
+  width: 310%;
   height: 467px;
   overflow: hidden;
-  background: url('src/assets/images/game_elements/Fondo.png') center 32%;
+  background: url('@/assets/images/game_elements/Fondo.png') center 32%;
 }
 
 .crop-element {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 50%;
   opacity: 0.3;
+  transform: translateX(-50%);
 }
 
 .crop-element--active {
   opacity: 1;
+}
+
+.flowers-count,
+.fruits-count {
+  position: absolute;
+  z-index: 100;
+  top: 10px;
+  border: 1px solid #5e5d5d;
+  color: #929292;
+  padding: 5px 10px;
+  display: flex;
+  gap: 5px;
+}
+
+/* .flowers-count__image,
+.fruits-count__image{
+  width: 18px;
+} */
+
+.flowers-count {
+  left: 10px;
+}
+
+.fruits-count {
+  right: 10px;
 }
 </style>

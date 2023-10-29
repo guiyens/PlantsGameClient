@@ -19,7 +19,7 @@ const code = ref('')
 </script>
 
 <template>
-  <div v-if="!isUserValid">
+  <div class="inital-panel-container" v-if="!isUserValid">
     <h2 class="inital-panel__title">¡¡Bienvenido a Planta!!</h2>
     <p class="inital-panel__text">Código de validación</p>
     <p class="inital-panel__text inital-panel__text--red" v-if="errorNotValid !== ''">
@@ -30,7 +30,7 @@ const code = ref('')
     </div>
     <button class="inital-panel__button" @click="$emit('setCode', code)">Enviar</button>
   </div>
-  <div v-if="isUserValid">
+  <div class="inital-panel-container" v-if="isUserValid">
     <div class="inital-panel" v-if="!nameConnected">
       <h2 class="inital-panel__title inital-panel__title--green">¡¡Perfecto, ya puedes jugar!!</h2>
       <p class="inital-panel__text">¿Cual es tu nombre?</p>
@@ -45,10 +45,11 @@ const code = ref('')
         :src="getImage({ type: 'semilla', image: 'semilla.jpeg' } as ICard)"
         alt=""
       />
-      <h2 class="inital-panel__title inital-panel__title--no-margin-top">
-        ¡¡ Ya estas dentro {{ nameConnected }} !! Esperando a más jugadores ({{ players?.length }} /
-        {{ maxPlayers }})
-      </h2>
+      <div class="inital-panel__title inital-panel__title--no-margin-top">
+        <p class="inital-panel__text">¡¡ Ya estas dentro {{ nameConnected }} !!</p>
+        <p class="inital-panel__text">Esperando a más jugadores</p>
+        <p>({{ players?.length }} / {{ maxPlayers }})</p>
+      </div>
       <button
         v-if="!!players && players.length > 1"
         class="inital-panel__start"
@@ -61,6 +62,9 @@ const code = ref('')
 </template>
 
 <style>
+.inital-panel-container {
+  background-color: #fff;
+}
 .inital-panel__title {
   margin-top: 150px;
   text-align: center;
@@ -68,7 +72,7 @@ const code = ref('')
   margin-bottom: 50px;
 }
 .inital-panel__title--no-margin-top {
-  margin-top: 0;
+  margin: 0;
 }
 .inital-panel__title--green {
   color: rgb(54, 210, 124);
@@ -110,7 +114,7 @@ const code = ref('')
   width: 300px;
   margin: 0 auto;
   display: block;
-  margin-top: 20vh;
+  margin-top: 8vh;
   animation: fadeIn 5s infinite;
 }
 .inital-panel__start {

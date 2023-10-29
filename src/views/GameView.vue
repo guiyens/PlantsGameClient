@@ -12,17 +12,19 @@ import SpecialCardPanel from '@/components/SpecialCardPanel.vue'
 import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
+import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
 const url = 'https://plantsgameserver.onrender.com'
 //const url = 'http://localhost:3000'
 
 var socket = io(url, { transports: ['websocket'] })
 
+const isUserValid = ref(false)
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
 const game: any = ref({})
-const clicks = ref(0)
 const isSelectionActiveToDiscard = ref(false)
+const isFirstUpdate = ref(true)
 const selectedCardsToDiscard: Ref<Array<ICard>> = ref([])
 const isSelectionActiveToPlay = ref(false)
 const selectedExtresCardToPlay: Ref<ICard | undefined> = ref(undefined)
@@ -33,7 +35,6 @@ const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 const isSpecialCardFound = ref(false)
 const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
-const isUserValid = ref(false)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
@@ -52,14 +53,12 @@ const playerCrop: ComputedRef<ICrop> = computed(() => {
   return playerFound?.crop
 })
 
-function isExtresSettableOnPlayer(player: IPlayer): boolean {
-  return !(player.crop.dictionary[EGroup.EXTRES] as Array<ICard>).some(
-    (card: ICard) => card.type === selectedExtresCardToPlay.value?.type
-  )
-}
-
 function addUser(name: string) {
   if (name === '') {
+    return
+  }
+  if (name.length > 15) {
+    alert('El nombre no puede tener mas de 15 letras')
     return
   }
   socket.emit('addUser', name)
@@ -67,13 +66,6 @@ function addUser(name: string) {
 
 function disscard() {
   isSelectionActiveToDiscard.value = true
-}
-
-function selectPlayer(player: IPlayer) {
-  if (!isSelectionActiveChoosePlayer.value) {
-    return
-  }
-  sendExtresCardToplay(player)
 }
 
 function selectCard(card: ICard) {
@@ -202,7 +194,12 @@ socket.on('alreadyAddedUser', function () {
 
 socket.on('updateGame', function (newGame: IGame) {
   game.value = newGame
-  userDisplayed.value = game.value.userActive
+  if (isFirstUpdate.value && !!newGame.userActive) {
+    userDisplayed.value = game.value.players?.find(
+      (player: IPlayer) => player.socketId === socketId.value
+    ).socketId
+    isFirstUpdate.value = false
+  }
 })
 
 socket.on('closedGame', function () {
@@ -241,7 +238,10 @@ socket.on('reconnect', (attempt) => {
     <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
     <div v-if="!gameEnded">
       <!-- Error =========-->
-      <p v-if="error">{{ error }}</p>
+      <p class="error-container" v-if="error">
+        <span class="error-icon">🚫</span>
+        <span class="error-text"> {{ error }}</span>
+      </p>
       <!-- Initial Panel =========-->
       <InitialPanel
         v-if="!error"
@@ -256,13 +256,17 @@ socket.on('reconnect', (attempt) => {
         @startGame="startGameNow"
       ></InitialPanel>
       <!--======== Players Selector =========-->
-      <div class="players-selector">
+      <div class="players-selector" v-if="nameConnected && game.state !== StateEnum.WAITING">
         <div
           class="player-selector"
           @click="displayPlayer(player.socketId)"
           v-for="player in game.players"
           :key="player.socketId"
-          :class="{ 'player-selector--active': player.socketId === userDisplayed }"
+          :class="{
+            'player-selector--active': player.socketId === userDisplayed,
+            'player-selector--player': player.socketId === socketId,
+            'player-selector--turn': player.socketId === game.userActive
+          }"
         >
           {{ player.socketId === socketId ? 'Yo' : player.name }}
         </div>
@@ -276,17 +280,6 @@ socket.on('reconnect', (attempt) => {
           )"
           :key="index"
         >
-          <h1
-            style="text-align: center"
-            :class="{
-              'player-cards--selecting': isSelectionActiveChoosePlayer,
-              'player-cards--disabled':
-                isSelectionActiveChoosePlayer && !isExtresSettableOnPlayer(player)
-            }"
-            @click="selectPlayer(player)"
-          >
-            {{ player.name }}
-          </h1>
           <Crop
             v-if="player?.crop && game.state !== StateEnum.WAITING"
             :playerCrop="player.crop"
@@ -337,6 +330,16 @@ socket.on('reconnect', (attempt) => {
     </div>
     <!--======== game Ended Panel =========-->
     <GameEndedPanel v-if="gameEnded" :gameEndedMessage="gameEndedMessage"></GameEndedPanel>
+    <!--======== selection Player Panel =========-->
+    <BugPlayerSelection
+      v-if="isSelectionActiveChoosePlayer"
+      :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+      :selectedExtresCardToPlay="selectedExtresCardToPlay"
+      :players="game.players"
+      :playerId="socketId"
+      @sendExtresCardToplay="sendExtresCardToplay"
+      @cancel="cancel"
+    ></BugPlayerSelection>
   </main>
 </template>
 
@@ -344,6 +347,10 @@ socket.on('reconnect', (attempt) => {
 .main-container {
   width: 360px;
   margin: 0 auto;
+  background-color: #67360b;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 .cards-container {
   display: flex;
@@ -354,7 +361,7 @@ socket.on('reconnect', (attempt) => {
 .player-cards {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 25px 0;
   gap: 10px;
 }
 .card {
@@ -402,19 +409,96 @@ socket.on('reconnect', (attempt) => {
 }
 .players-selector {
   display: flex;
-  justify-content: center;
+  background-color: #fff;
 }
 .player-selector {
-  border: 1px solid #676767;
   color: #444;
-  padding: 5px 20px;
+  padding: 8px 6px;
   cursor: pointer;
   flex-grow: 1;
   text-align: center;
+  background-color: #fff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  font-size: 18px;
+  text-transform: capitalize;
 }
 .player-selector--active {
-  background-color: #444;
+  background-color: #67360b;
   color: #fff;
   font-weight: 700;
+  text-overflow: inherit;
+  overflow: inherit;
+  max-width: 120px;
+}
+.player-selector--player {
+  max-width: 70px;
+}
+.player-selector--turn {
+  -webkit-animation: target-fade 1.5s infinite alternate;
+  -moz-animation: target-fade 1.5s infinite alternate;
+}
+.player-selector--turn.player-selector--active {
+  -webkit-animation: target-fade-active 2s infinite alternate;
+  -moz-animation: target-fade-active 2s infinite alternate;
+}
+
+@-webkit-keyframes target-fade {
+  0% {
+    background-color: rgba(45, 245, 82, 0.8);
+  }
+  100% {
+    background-color: rgba(253, 253, 253, 0);
+  }
+}
+@-moz-keyframes target-fade {
+  0% {
+    background-color: rgba(45, 245, 82, 0.8);
+  }
+  100% {
+    background-color: rgba(253, 253, 253, 0);
+  }
+}
+
+@-webkit-keyframes target-fade-active {
+  0% {
+    background-color: rgb(103, 54, 11, 1);
+  }
+  100% {
+    background-color: rgb(103, 54, 11, 0.5);
+  }
+}
+@-moz-keyframes target-fade-active {
+  0% {
+    background-color: rgb(103, 54, 11, 1);
+  }
+  100% {
+    background-color: rgb(103, 54, 11, 0.5);
+  }
+}
+
+.error-container {
+  background-color: rgb(224, 102, 102);
+  text-align: center;
+  font-size: 26px;
+  padding: 0 50px;
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.error-icon {
+  margin-top: 100px;
+  font-size: 80px;
+}
+
+button {
+  background: rgb(128, 249, 128);
+  border: none;
+  font-size: 22px !important;
+  padding: 10px 15px !important;
 }
 </style>

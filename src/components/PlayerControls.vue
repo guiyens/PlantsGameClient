@@ -44,9 +44,9 @@ const props = defineProps({
     >
       Jugar carta
     </button>
-    <div v-if="userActive === socketId && isSelectionActiveToDiscard">
-      <p>Selecciona las cartas que quieres descarter y confirma</p>
-      <button class="action" @click="$emit('cancel')">Cancelar</button>
+    <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToDiscard">
+      <p class="action-text">Selecciona las cartas que quieres descarter y confirma</p>
+      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
       <button
         :disabled="selectedCardsToDiscard!.length === 0"
         @click="$emit('sendDisscards')"
@@ -55,13 +55,13 @@ const props = defineProps({
         Confirmar
       </button>
     </div>
-    <div v-if="userActive === socketId && isSelectionActiveToPlay">
-      <button class="action" @click="$emit('cancel')">Cancelar</button>
-      Selecciona la carta que quieres jugar
+    <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToPlay">
+      <p class="action-text">Selecciona la carta que quieres jugar</p>
+      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
     </div>
-    <div v-if="userActive === socketId && isSelectionActiveChoosePlayer">
-      <button class="action" @click="$emit('cancel')">Cancelar</button>
-      Selecciona un jugador para aplicarle la carta de estres
+    <div class="action-desc" v-if="userActive === socketId && isSelectionActiveChoosePlayer">
+      <p class="action-text">Selecciona un jugador para aplicarle la carta de estres</p>
+      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
     </div>
   </div>
 </template>
@@ -79,7 +79,20 @@ const props = defineProps({
 }
 .action {
   flex-grow: 1;
-  padding: 5px 10px;
-  font-size: 15px;
+}
+.action-text {
+  color: white;
+  font-weight: normal;
+  padding: 0 0 0 20px;
+  line-height: 20px;
+  width: 220px;
+  text-align: center;
+}
+.action--cancel {
+  background-color: rgb(224, 102, 102);
+}
+.action-desc {
+  display: flex;
+  padding-bottom: 5px;
 }
 </style>
