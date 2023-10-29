@@ -11,8 +11,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="gameEndedPanel">
-    <p class="gameEndedPanel__icon">{{ gameEndedMessage?.includes('Ganado') ? '🏆' : '😞' }}</p>
+  <div
+    class="gameEndedPanel"
+    :class="{ 'gameEndedPanel--winner': gameEndedMessage?.includes('GANADO') }"
+  >
+    <p class="gameEndedPanel__icon">{{ gameEndedMessage?.includes('GANADO') ? '🏆' : '😞' }}</p>
     <p class="gameEndedPanel__text">{{ gameEndedMessage }}</p>
   </div>
 </template>

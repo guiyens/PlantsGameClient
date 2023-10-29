@@ -117,7 +117,7 @@ function isElementActive(element: string, type: string) {
   position: absolute;
   top: 0;
   left: 50%;
-  opacity: 0.3;
+  opacity: 0.2;
   transform: translateX(-50%);
 }
 

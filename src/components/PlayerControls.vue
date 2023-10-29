@@ -44,16 +44,20 @@ const props = defineProps({
     >
       Jugar carta
     </button>
-    <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToDiscard">
-      <p class="action-text">Selecciona las cartas que quieres descarter y confirma</p>
-      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
-      <button
-        :disabled="selectedCardsToDiscard!.length === 0"
-        @click="$emit('sendDisscards')"
-        class="action"
-      >
-        Confirmar
-      </button>
+    <div class="action-desc--discard" v-if="userActive === socketId && isSelectionActiveToDiscard">
+      <p class="action-text action-text--discard">
+        Selecciona las cartas que quieres descarter y confirma
+      </p>
+      <div class="action-desc">
+        <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
+        <button
+          :disabled="selectedCardsToDiscard!.length === 0"
+          @click="$emit('sendDisscards')"
+          class="action"
+        >
+          Confirmar
+        </button>
+      </div>
     </div>
     <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToPlay">
       <p class="action-text">Selecciona la carta que quieres jugar</p>
@@ -83,9 +87,9 @@ const props = defineProps({
 .action-text {
   color: white;
   font-weight: normal;
-  padding: 0 0 0 20px;
+  padding: 0 0 5px 20px;
   line-height: 20px;
-  width: 220px;
+  width: 90%;
   text-align: center;
 }
 .action--cancel {
@@ -94,5 +98,10 @@ const props = defineProps({
 .action-desc {
   display: flex;
   padding-bottom: 5px;
+}
+.action-desc--discard {
+  display: block;
+}
+.action-text--discard {
 }
 </style>
