@@ -418,7 +418,7 @@ socket.on('reconnect', (attempt) => {
 }
 .player-selector {
   color: #444;
-  padding: 8px 6px;
+  padding: 2px 6px;
   cursor: pointer;
   flex-grow: 1;
   text-align: center;
@@ -427,7 +427,7 @@ socket.on('reconnect', (attempt) => {
   overflow: hidden;
   white-space: nowrap;
   flex-wrap: nowrap;
-  font-size: 18px;
+  font-size: 16px;
   text-transform: capitalize;
 }
 .player-selector--active {
