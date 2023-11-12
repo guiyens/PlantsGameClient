@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, type Ref, type ComputedRef } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
+import { ref, computed, type Ref, type ComputedRef, onBeforeMount } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import { EGroup, type ICard } from '@/Infertaces/ICard'
@@ -18,6 +17,13 @@ const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgames
 
 var socket = io(url, { transports: ['websocket'] })
 
+onBeforeMount(async () => {
+  if (!import.meta.env.DEV) {
+    window.removeEventListener('beforeunload', (event) => {
+      event.returnValue = 'You have unfinished changes!'
+    })
+  }
+})
 const isUserValid = ref(import.meta.env.DEV)
 const nameConnected = ref('')
 const socketId = ref('')
