@@ -36,7 +36,7 @@ const isSelectionActiveToPlay = ref(false)
 const selectedExtresCardToPlay: Ref<ICard | undefined> = ref(undefined)
 const isSelectionActiveChoosePlayer = ref(false)
 const gameEnded = ref(false)
-const gameEndedMessage = ref('')
+const areYouWinner = ref(false)
 const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 const isSpecialCardFound = ref(false)
@@ -230,11 +230,7 @@ socket.on('SpecialCardFound', function (specialCardInfo: { newGame: IGame; speci
 
 socket.on('winnerGame', function (winnerSocketId: string) {
   gameEnded.value = true
-  gameEndedMessage.value =
-    socketId.value === winnerSocketId
-      ? 'El juego ha terminado, HAS GANADO!!!!'
-      : 'El juego ha terminado, has perdido. El ganador ha sido ' +
-        game.value.players.find((player: IPlayer) => player.socketId === winnerSocketId).name
+  areYouWinner.value = socketId.value === winnerSocketId
 })
 
 socket.on('error', (err) => {
@@ -341,7 +337,7 @@ socket.on('reconnect', (attempt) => {
       ></SpecialCardPanel>
     </div>
     <!--======== game Ended Panel =========-->
-    <GameEndedPanel v-if="gameEnded" :gameEndedMessage="gameEndedMessage"></GameEndedPanel>
+    <GameEndedPanel v-if="gameEnded" :areYouWinner="true"></GameEndedPanel>
     <!--======== selection Player Panel =========-->
     <BugPlayerSelection
       v-if="isSelectionActiveChoosePlayer"

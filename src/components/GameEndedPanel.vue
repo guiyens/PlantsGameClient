@@ -6,18 +6,12 @@ import type { ICrop } from '@/Infertaces/ICrop'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 
 const props = defineProps({
-  gameEndedMessage: String
+  areYouWinner: Boolean
 })
 </script>
 
 <template>
-  <div
-    class="gameEndedPanel"
-    :class="{ 'gameEndedPanel--winner': gameEndedMessage?.includes('GANADO') }"
-  >
-    <p class="gameEndedPanel__icon">{{ gameEndedMessage?.includes('GANADO') ? '🏆' : '😞' }}</p>
-    <p class="gameEndedPanel__text">{{ gameEndedMessage }}</p>
-  </div>
+  <div class="gameEndedPanel" :class="{ 'gameEndedPanel--winner': areYouWinner }"></div>
 </template>
 
 <style>
@@ -27,23 +21,10 @@ const props = defineProps({
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgb(224, 102, 102);
+  background: url('@/assets/images/game_elements/Pantalla-has-perdido.png') center 32%;
+  background-size: 730px auto;
 }
 .gameEndedPanel--winner {
-  background-color: rgb(128, 249, 128);
-}
-.gameEndedPanel__text {
-  text-align: center;
-  font-size: 26px;
-  width: 70%;
-  margin: 20px auto;
-  color: #fff;
-}
-
-.gameEndedPanel__icon {
-  text-align: center;
-  font-size: 50px;
-  width: 90%;
-  margin: 100px auto 0;
+  background: url('@/assets/images/game_elements/Pantalla-Ganador.png') center 32%;
 }
 </style>
