@@ -251,7 +251,7 @@ socket.on('updateGame', function (newGame: IGame) {
       lastActions.value.push(
         newGame.userActive !== socketId.value
           ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
-              (player: IPlayer) => player.socketId === socketId.value
+              (player: IPlayer) => player.socketId === newGame.userActive
             ).name}</strong>`
           : 'Es <strong>tu turno</strong>'
       )
