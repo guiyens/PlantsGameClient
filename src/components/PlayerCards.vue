@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRefs, type ComputedRef, computed } from 'vue'
+import { toRefs } from 'vue'
 import type { PropType } from 'vue'
 import type { ICard } from '@/Infertaces/ICard'
 import type { ICrop } from '@/Infertaces/ICrop'
@@ -15,16 +15,14 @@ const props = defineProps({
 
 const { playerCrop } = toRefs(props)
 
-const playerCardsMargin: ComputedRef<number> = computed(() => {
-  const playersBar = 44.8
-  const crop = 467
-  const cards = 132.16
-  const actions = 46.5
-  const totalElementsHeight = playersBar + crop + cards + actions
-  const viewportHeight = document.documentElement.clientWidth
-  const whiteSpace = viewportHeight - totalElementsHeight
-  return whiteSpace > 0 ? whiteSpace / 2 : 0
-})
+const playersBar = 44.8
+const crop = 467
+const cards = 132.16
+const actions = 46.5
+const totalElementsHeight = playersBar + crop + cards + actions
+const viewportHeight = document.documentElement.clientWidth
+const whiteSpace = viewportHeight - totalElementsHeight
+const playerCardsMargin = whiteSpace > 0 ? whiteSpace / 2 : 0
 
 function isCardPlayable(card: ICard): boolean {
   if (card.group === 'INDUCTING_CONDITION' || card.group === 'TREATMENT') {

@@ -80,6 +80,9 @@ const props = defineProps({
 .actions {
   display: flex;
   justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 .action {
   flex-grow: 1;
