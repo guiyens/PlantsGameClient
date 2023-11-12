@@ -22,7 +22,7 @@ const actions = 46.5
 const totalElementsHeight = playersBar + crop + cards + actions
 const viewportHeight = document.documentElement.clientWidth
 const whiteSpace = viewportHeight - totalElementsHeight
-const playerCardsMargin = whiteSpace > 0 ? whiteSpace / 2 : 0
+const playerCardsMargin = whiteSpace > 0 ? whiteSpace / 2 : 10
 
 function isCardPlayable(card: ICard): boolean {
   if (card.group === 'INDUCTING_CONDITION' || card.group === 'TREATMENT') {
