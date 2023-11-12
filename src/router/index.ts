@@ -17,7 +17,7 @@ const router = createRouter({
       beforeEnter: (to, from) => {
         if (!import.meta.env.DEV) {
           window.addEventListener('beforeunload', (event) => {
-            event.returnValue = 'You have unfinished changes!'
+            event.returnValue = 'Si sales perderas la partida'
           })
         }
       }
