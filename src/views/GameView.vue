@@ -14,12 +14,11 @@ import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
 import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
-const url = 'https://plantsgameserver.onrender.com'
-// const url = 'http://localhost:3000'
+const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgameserver.onrender.com'
 
 var socket = io(url, { transports: ['websocket'] })
 
-const isUserValid = ref(false)
+const isUserValid = ref(import.meta.env.DEV)
 const nameConnected = ref('')
 const socketId = ref('')
 const error = ref('')
@@ -176,7 +175,7 @@ function displayPlayer(playerId: string): void {
 
 socket.on('connect', function () {
   isServerConnected.value = true
-  isUserValid.value = false
+  isUserValid.value = import.meta.env.DEV
   game.value = {}
 })
 
@@ -369,7 +368,7 @@ socket.on('reconnect', (attempt) => {
   gap: 10px;
 }
 .card {
-  width: 80px;
+  width: 70px;
   text-align: center;
   height: 100%;
 }

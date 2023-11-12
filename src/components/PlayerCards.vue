@@ -17,7 +17,7 @@ const { playerCrop } = toRefs(props)
 
 const playersBar = 44.8
 const crop = 467
-const cards = 132.16
+const cards = 116.45
 const actions = 46.5
 const totalElementsHeight = playersBar + crop + cards + actions
 const viewportHeight = document.documentElement.clientWidth
