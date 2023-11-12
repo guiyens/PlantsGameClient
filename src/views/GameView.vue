@@ -503,7 +503,7 @@ socket.on('reconnect', (attempt) => {
 button {
   background: rgb(128, 249, 128);
   border: none;
-  font-size: 20px !important;
-  padding: 12px 15px !important;
+  font-size: 17px !important;
+  padding: 8px 15px !important;
 }
 </style>
