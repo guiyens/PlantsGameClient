@@ -5,10 +5,12 @@ import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import { EGroup, type ICard } from '@/Infertaces/ICard'
 import type { IPlayer } from '@/Infertaces/IPlayer'
 import type { ICrop } from '@/Infertaces/ICrop'
+import type { ILog } from '@/Infertaces/ILog'
 import Crop from '@/components/Crop.vue'
 import PlayerCards from '@/components/PlayerCards.vue'
 import WildCardSelectionPanel from '@/components/WildCardSelectionPanel.vue'
 import SpecialCardPanel from '@/components/SpecialCardPanel.vue'
+import Notifications from '@/components/Notifications.vue'
 import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
@@ -44,6 +46,7 @@ const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
+const lastActions: Ref<Array<string>> = ref([])
 
 if (!import.meta.env.DEV) {
   window.addEventListener('beforeunload', (event) => {
@@ -181,6 +184,40 @@ function displayPlayer(playerId: string): void {
   userDisplayed.value = playerId
 }
 
+function buildStringAction(log: ILog): string {
+  if (log.action === EGroup.EXTRES) {
+    return `<strong>${log.player.name}</strong> ha lanzado una carta de <strong>${getActionText(
+      log.action
+    )}</strong> a <strong>${log.playerAffectted?.name}</strong>`
+  }
+  return `<strong>${log.player.name}</strong> ha jugado una carta de <strong>${getActionText(
+    log.action
+  )}</strong>`
+}
+
+function closeNotifications() {
+  lastActions.value = []
+}
+
+function getActionText(action: EGroup): string {
+  if (action === EGroup.EXTRES) {
+    return 'Estrés'
+  }
+  if (action === EGroup.VEGETETIVE_ORGAN) {
+    return 'Organo'
+  }
+  if (action === EGroup.INDUCTING_CONDITION) {
+    return 'Condiciones inductoras'
+  }
+  if (action === EGroup.TREATMENT) {
+    return 'Tratamiento'
+  }
+  if (action === EGroup.WILDCARD) {
+    return 'Comodín'
+  }
+  return ''
+}
+
 socket.on('connect', function () {
   isServerConnected.value = true
   isUserValid.value = import.meta.env.DEV
@@ -206,6 +243,22 @@ socket.on('alreadyAddedUser', function () {
 
 socket.on('updateGame', function (newGame: IGame) {
   game.value = newGame
+  if (game.value.activityLog.length) {
+    lastActions.value.push(
+      buildStringAction(game.value.activityLog[game.value.activityLog.length - 1])
+    )
+    lastActions.value.push(
+      newGame.userActive !== socketId.value
+        ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
+            (player: IPlayer) => player.socketId === socketId.value
+          ).name}</strong>`
+        : 'Es <strong>tu turno</strong>'
+    )
+    setTimeout(function () {
+      lastActions.value = []
+    }, 4000)
+  }
+
   if (isFirstUpdate.value && !!newGame.userActive) {
     userDisplayed.value = game.value.players?.find(
       (player: IPlayer) => player.socketId === socketId.value
@@ -348,6 +401,11 @@ socket.on('reconnect', (attempt) => {
       @sendExtresCardToplay="sendExtresCardToplay"
       @cancel="cancel"
     ></BugPlayerSelection>
+    <Notifications
+      v-if="lastActions.length"
+      @closeNotifications="closeNotifications"
+      :lastActions="lastActions"
+    ></Notifications>
   </main>
 </template>
 
