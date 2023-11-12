@@ -247,13 +247,16 @@ socket.on('updateGame', function (newGame: IGame) {
     lastActions.value.push(
       buildStringAction(game.value.activityLog[game.value.activityLog.length - 1])
     )
-    lastActions.value.push(
-      newGame.userActive !== socketId.value
-        ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
-            (player: IPlayer) => player.socketId === socketId.value
-          ).name}</strong>`
-        : 'Es <strong>tu turno</strong>'
-    )
+    setTimeout(function () {
+      lastActions.value.push(
+        newGame.userActive !== socketId.value
+          ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
+              (player: IPlayer) => player.socketId === socketId.value
+            ).name}</strong>`
+          : 'Es <strong>tu turno</strong>'
+      )
+    }, 500)
+
     setTimeout(function () {
       lastActions.value = []
     }, 4000)

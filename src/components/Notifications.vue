@@ -16,10 +16,11 @@ const props = defineProps({
 <style>
 .notifications {
   position: absolute;
-  top: 100px;
+  top: 50px;
   left: 6%;
   width: 88%;
   padding-left: 0;
+  z-index: 200;
 }
 .notification {
   padding: 5px 20px 5px 10px;
