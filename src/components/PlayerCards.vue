@@ -47,7 +47,7 @@ function isCardPlayable(card: ICard): boolean {
   <div
     class="player-cards"
     v-if="playerCards && playerCards.length"
-    :style="{ 'margin-top': `${playerCardsMargin}px`, 'margin-bottom': `${playerCardsMargin}px` }"
+    :style="{ 'padding-top': `${playerCardsMargin}px`, 'padding-bottom': `${playerCardsMargin}px` }"
   >
     <div
       class="card"

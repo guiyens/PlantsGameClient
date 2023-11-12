@@ -15,9 +15,11 @@ const router = createRouter({
       name: 'game',
       component: GameView,
       beforeEnter: (to, from) => {
-        window.addEventListener('beforeunload', (event) => {
-          event.returnValue = 'You have unfinished changes!'
-        })
+        if (!import.meta.env.DEV) {
+          window.addEventListener('beforeunload', (event) => {
+            event.returnValue = 'You have unfinished changes!'
+          })
+        }
       }
     }
   ]

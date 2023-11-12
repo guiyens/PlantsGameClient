@@ -39,9 +39,11 @@ const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
 
-window.addEventListener('beforeunload', (event) => {
-  event.returnValue = 'You have unfinished changes!'
-})
+if (!import.meta.env.DEV) {
+  window.addEventListener('beforeunload', (event) => {
+    event.returnValue = 'You have unfinished changes!'
+  })
+}
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -368,7 +370,7 @@ socket.on('reconnect', (attempt) => {
   gap: 10px;
 }
 .card {
-  width: 70px;
+  width: 80px;
   text-align: center;
   height: 100%;
 }
