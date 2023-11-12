@@ -15,6 +15,15 @@ const props = defineProps({
 
 const { playerCrop } = toRefs(props)
 
+const playersBar = 44.8
+const crop = 467
+const cards = 132.16
+const actions = 46.5
+const totalElementsHeight = playersBar + crop + cards + actions
+const viewportHeight = document.documentElement.clientWidth
+const whiteSpace = viewportHeight - totalElementsHeight
+const playerCardsMargin = whiteSpace > 0 ? whiteSpace / 2 : 0
+
 function isCardPlayable(card: ICard): boolean {
   if (card.group === 'INDUCTING_CONDITION' || card.group === 'TREATMENT') {
     if (!(playerCrop?.value?.dictionary[card.group] as Array<ICard>).length) {
@@ -35,7 +44,11 @@ function isCardPlayable(card: ICard): boolean {
 </script>
 
 <template>
-  <div class="player-cards" v-if="playerCards && playerCards.length">
+  <div
+    class="player-cards"
+    v-if="playerCards && playerCards.length"
+    :style="{ 'margin-top': `${playerCardsMargin}px`, 'margin-bottom': `${playerCardsMargin}px` }"
+  >
     <div
       class="card"
       v-for="(card, index) in playerCards"

@@ -13,7 +13,12 @@ const router = createRouter({
     {
       path: '/game',
       name: 'game',
-      component: GameView
+      component: GameView,
+      beforeEnter: (to, from) => {
+        window.addEventListener('beforeunload', (event) => {
+          event.returnValue = 'You have unfinished changes!'
+        })
+      }
     }
   ]
 })

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import { EGroup, type ICard } from '@/Infertaces/ICard'
@@ -38,6 +39,10 @@ const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
+
+window.addEventListener('beforeunload', (event) => {
+  event.returnValue = 'You have unfinished changes!'
+})
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -361,7 +366,6 @@ socket.on('reconnect', (attempt) => {
 .player-cards {
   display: flex;
   justify-content: center;
-  margin: 25px 0;
   gap: 10px;
 }
 .card {
