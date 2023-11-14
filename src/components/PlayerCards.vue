@@ -15,12 +15,12 @@ const props = defineProps({
 
 const { playerCrop } = toRefs(props)
 
+debugger
 const playersBar = 44.8
 const crop = 467
 const cards = 116.45
-const actions = 46.5
-const totalElementsHeight = playersBar + crop + cards + actions
-const viewportHeight = document.documentElement.clientWidth
+const totalElementsHeight = playersBar + crop + cards
+const viewportHeight = window.innerHeight
 const whiteSpace = viewportHeight - totalElementsHeight
 const playerCardsMargin = whiteSpace > 0 ? whiteSpace / 2 : 0
 
