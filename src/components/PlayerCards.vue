@@ -15,7 +15,6 @@ const props = defineProps({
 
 const { playerCrop } = toRefs(props)
 
-debugger
 const playersBar = 44.8
 const crop = 467
 const cards = 116.45

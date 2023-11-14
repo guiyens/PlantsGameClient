@@ -393,7 +393,7 @@ socket.on('reconnect', (attempt) => {
       ></SpecialCardPanel>
     </div>
     <!--======== game Ended Panel =========-->
-    <GameEndedPanel v-if="gameEnded" :areYouWinner="true"></GameEndedPanel>
+    <GameEndedPanel v-if="gameEnded" :areYouWinner="areYouWinner"></GameEndedPanel>
     <!--======== selection Player Panel =========-->
     <BugPlayerSelection
       v-if="isSelectionActiveChoosePlayer"
