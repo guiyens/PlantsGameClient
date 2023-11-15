@@ -13,14 +13,7 @@ const router = createRouter({
     {
       path: '/game',
       name: 'game',
-      component: GameView,
-      beforeEnter: (to, from) => {
-        if (!import.meta.env.DEV) {
-          window.addEventListener('beforeunload', (event) => {
-            event.returnValue = 'Si sales perderas la partida'
-          })
-        }
-      }
+      component: GameView
     }
   ]
 })

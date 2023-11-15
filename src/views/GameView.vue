@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, type Ref, type ComputedRef, onBeforeMount } from 'vue'
+import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
 import { EGroup, type ICard } from '@/Infertaces/ICard'
@@ -19,13 +19,6 @@ const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgames
 
 var socket = io(url, { transports: ['websocket'] })
 
-onBeforeMount(async () => {
-  if (!import.meta.env.DEV) {
-    window.removeEventListener('beforeunload', (event) => {
-      event.returnValue = 'Si sales perderas la partida'
-    })
-  }
-})
 const isUserValid = ref(import.meta.env.DEV)
 const nameConnected = ref('')
 const socketId = ref('')
@@ -47,12 +40,6 @@ const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
 const lastActions: Ref<Array<string>> = ref([])
-
-if (!import.meta.env.DEV) {
-  window.addEventListener('beforeunload', (event) => {
-    event.returnValue = 'Si sales perderas la partida'
-  })
-}
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -185,13 +172,19 @@ function displayPlayer(playerId: string): void {
 }
 
 function buildStringAction(log: ILog): string {
+  if (log.action === 'DISMISS') {
+    return `<strong>${log.player.name}</strong> se ha descartado`
+  }
+  if (log.action === 'DISCONNECT') {
+    return `<strong>${log.player.name}</strong> se ha desconectado`
+  }
   if (log.action === EGroup.EXTRES) {
     return `<strong>${log.player.name}</strong> ha lanzado una carta de <strong>${getActionText(
       log.action
     )}</strong> a <strong>${log.playerAffectted?.name}</strong>`
   }
   return `<strong>${log.player.name}</strong> ha jugado una carta de <strong>${getActionText(
-    log.action
+    log.action as EGroup
   )}</strong>`
 }
 
@@ -224,7 +217,8 @@ socket.on('connect', function () {
   game.value = {}
 })
 
-socket.on('disconnect', function () {
+socket.on('disconnect', function (reason) {
+  console.log(reason)
   isServerConnected.value = false
   game.value = {}
 })
@@ -244,9 +238,11 @@ socket.on('alreadyAddedUser', function () {
 socket.on('updateGame', function (newGame: IGame) {
   game.value = newGame
   if (game.value.activityLog.length) {
-    lastActions.value.push(
-      buildStringAction(game.value.activityLog[game.value.activityLog.length - 1])
-    )
+    const lastLog = game.value.activityLog[game.value.activityLog.length - 1]
+    if (lastLog.player.socketId !== socketId.value) {
+      lastActions.value.push(buildStringAction(lastLog))
+    }
+
     setTimeout(function () {
       lastActions.value.push(
         newGame.userActive !== socketId.value
