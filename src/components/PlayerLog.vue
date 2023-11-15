@@ -8,6 +8,12 @@ const props = defineProps({
 })
 
 function buildStringAction(log: ILog): string {
+  if (log.action === 'DISMISS') {
+    return `<strong>${log.player.name}</strong> se ha descartado`
+  }
+  if (log.action === 'DISCONNECT') {
+    return `<strong>${log.player.name}</strong> se ha desconectado`
+  }
   if (log.action === EGroup.EXTRES) {
     return `<strong>${log.player.name}</strong> ha lanzado una carta de <strong>${getActionText(
       log.action
