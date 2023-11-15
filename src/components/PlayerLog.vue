@@ -77,7 +77,7 @@ function getActionText(action: EGroup): string {
 .log__actions {
   background: #a56329;
   padding: 10px 20px;
-  height: calc(100vh - 580px);
+  height: calc(100vh - 600px);
   overflow-y: auto;
 }
 .log__action {

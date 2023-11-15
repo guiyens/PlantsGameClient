@@ -569,9 +569,13 @@ socket.on('reconnect', (attempt) => {
 }
 
 button {
-  background: rgb(128, 249, 128);
+  background: rgb(29, 155, 86);
   border: none;
   font-size: 17px !important;
   padding: 8px 15px !important;
+  color: white;
+}
+button:disabled {
+  opacity: 0.5;
 }
 </style>

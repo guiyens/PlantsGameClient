@@ -6,13 +6,21 @@ import { getImage } from '@/utils/getImage'
 
 <template>
   <div class="wildcardSelection__panel">
-    <p class="wildcardSelection__text">Selecciona la carta por la que quieres cambiar el comidín</p>
-    <div class="wildcardSelection__cards">
-      <div class="wildcardSelection__card card" v-for="card in wilcardToCards.cards" :key="card.id">
-        <img :src="getImage(card as ICard)" @click="$emit('sendWildCard', card)" />
+    <div class="wildcardSelection__container">
+      <p class="wildcardSelection__text">
+        Selecciona la carta por la que quieres cambiar el comidín
+      </p>
+      <div class="wildcardSelection__cards">
+        <div
+          class="wildcardSelection__card card"
+          v-for="card in wilcardToCards.cards"
+          :key="card.id"
+        >
+          <img :src="getImage(card as ICard)" @click="$emit('sendWildCard', card)" />
+        </div>
       </div>
+      <button class="wildcardSelection__cancel" @click="$emit('cancel')">Cancelar</button>
     </div>
-    <button class="wildcardSelection__cancel" @click="$emit('cancel')">Cancelar</button>
   </div>
 </template>
 
@@ -24,25 +32,35 @@ import { getImage } from '@/utils/getImage'
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
   align-items: center;
-  padding-top: 50px;
   gap: 15px;
 }
-.wildcardSelection__text {
+.wildcardSelection__container {
+  padding: 50px 20px;
   width: 80%;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  font-size: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+}
+.wildcardSelection__text {
+  font-size: 21px;
   text-align: center;
-  font-weight: 700;
-  margin-bottom: 50px;
+  font-weight: 500;
+  margin-bottom: 25px;
+  line-height: 25px;
 }
 .wildcardSelection__cards {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
+}
+.wildcardSelection__card {
+  width: 64px !important;
 }
 .wildcardSelection__cancel {
   margin: 30px auto 0;
