@@ -15,6 +15,7 @@ import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
 import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
+import PlayerLog from '@/components/PlayerLog.vue'
 const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgameserver.onrender.com'
 
 var socket = io(url, { transports: ['websocket'] })
@@ -345,6 +346,14 @@ socket.on('reconnect', (attempt) => {
             :playerCrop="player.crop"
             :gameState="game.state"
           ></Crop>
+          <PlayerLog
+            :logs="
+              game.activityLog?.filter(
+                (element: ILog) => element.player.socketId === player.socketId
+              )
+            "
+            :playerName="player.name"
+          ></PlayerLog>
         </div>
       </div>
       <!--========Player =========-->
