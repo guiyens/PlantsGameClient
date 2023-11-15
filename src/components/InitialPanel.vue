@@ -40,6 +40,11 @@ const code = ref('')
       <button class="inital-panel__button" @click="$emit('addUser', name)">Enviar</button>
     </div>
     <div v-if="nameConnected && gameState === StateEnum.WAITING">
+      <p class="inital-panel__alert">
+        A partir de aquí <strong>si cambias la url</strong> o
+        <strong>actualizas la página</strong> saldrás de la partida y
+        <strong>no podrás volver a entrar</strong>
+      </p>
       <img
         class="inital-panel__image"
         :src="getImage({ type: 'semilla', image: 'semilla.jpeg' } as ICard)"
@@ -114,12 +119,23 @@ const code = ref('')
   width: 300px;
   margin: 0 auto;
   display: block;
-  margin-top: 8vh;
+  margin-top: 20px;
   animation: fadeIn 5s infinite;
 }
 .inital-panel__start {
   display: block;
   margin: 20px auto;
+}
+
+.inital-panel__alert {
+  padding: 10px;
+  width: 80%;
+  margin: 75px auto 0;
+  text-align: center;
+  color: rgb(208, 33, 33);
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid;
 }
 
 @keyframes fadeIn {
