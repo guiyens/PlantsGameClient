@@ -30,7 +30,7 @@ const code = ref('')
         {{ errorNotValid }}
       </p>
       <div>
-        <input class="inital-panel__input" autofocus type="text" v-model="code" />
+        <input class="inital-panel__input" type="password" autofocus v-model="code" />
       </div>
       <button class="inital-panel__button" @click="$emit('setCode', code)">Enviar</button>
     </div>
