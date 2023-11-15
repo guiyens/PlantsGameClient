@@ -19,10 +19,13 @@ const code = ref('')
 </script>
 
 <template>
-  <div class="inital-panel-container" v-if="!isUserValid && gameState === StateEnum.WAITING">
-    <div class="initial-panel">
+  <div
+    class="inital-panel-container"
+    v-if="!isUserValid && gameState !== StateEnum.STARTED && gameState !== StateEnum.FINISHED"
+  >
+    <div class="inital-panel">
       <h2 class="inital-panel__title">¡Bienvenido a Planta!</h2>
-      <p class="inital-panel__text">Código de validación</p>
+      <p class="inital-panel__text"><strong>Código de validación</strong></p>
       <p class="inital-panel__text inital-panel__text--red" v-if="errorNotValid !== ''">
         {{ errorNotValid }}
       </p>
@@ -32,7 +35,10 @@ const code = ref('')
       <button class="inital-panel__button" @click="$emit('setCode', code)">Enviar</button>
     </div>
   </div>
-  <div class="inital-panel-container" v-if="isUserValid && gameState === StateEnum.WAITING">
+  <div
+    class="inital-panel-container"
+    v-if="isUserValid && gameState !== StateEnum.STARTED && gameState !== StateEnum.FINISHED"
+  >
     <div class="inital-panel" v-if="!nameConnected">
       <h2 class="inital-panel__title inital-panel__title--green inital-panel__title--border">
         <strong>¡Perfecto!</strong> <br />
@@ -120,17 +126,18 @@ const code = ref('')
 }
 .inital-panel__input {
   width: 300px;
-  display: block;
   margin: 10px auto;
   font-size: 17px;
-  border-radius: 5px;
   text-align: center;
-  padding: 5px 0;
-  border-color: #ddd;
-  outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  display: block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
 }
 .inital-panel__input:focus {
   outline: none;
