@@ -305,7 +305,7 @@ socket.on('reconnect', (attempt) => {
       </p>
       <!-- Initial Panel =========-->
       <InitialPanel
-        v-if="!error"
+        v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
         :nameConnected="nameConnected"
         :gameState="game.state"
         :isUserValid="isUserValid"

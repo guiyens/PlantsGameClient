@@ -21,53 +21,67 @@ function isExtresSettableOnPlayer(player: IPlayer): boolean {
 
 <template>
   <div class="select-player-panel">
-    <p class="select-player-panel__text">
-      Selecicona al jugador al que le quieres mandar una carta de extress
-    </p>
-    <div v-for="playerInplayers in players!" :key="playerInplayers.name">
-      <h3
-        v-if="playerInplayers.socketId !== playerId"
-        style="text-align: center"
-        class="select-player-panel__player"
-        :class="{
-          'player-cards--selecting': isSelectionActiveChoosePlayer,
-          'player-cards--disabled':
-            isSelectionActiveChoosePlayer && !isExtresSettableOnPlayer(playerInplayers)
-        }"
-        @click="$emit('sendExtresCardToplay', playerInplayers)"
-      >
-        {{ playerInplayers.name }}
-      </h3>
+    <div class="select-player-panel__container">
+      <p class="select-player-panel__text">
+        Selecciona al jugador al que le quieres aplicar una carta de estrés
+      </p>
+      <div v-for="playerInplayers in players!" :key="playerInplayers.name">
+        <h3
+          v-if="playerInplayers.socketId !== playerId"
+          style="text-align: center"
+          class="select-player-panel__player"
+          :class="{
+            'player-cards--selecting': isSelectionActiveChoosePlayer,
+            'player-cards--disabled':
+              isSelectionActiveChoosePlayer && !isExtresSettableOnPlayer(playerInplayers)
+          }"
+          @click="$emit('sendExtresCardToplay', playerInplayers)"
+        >
+          {{ playerInplayers.name }}
+        </h3>
+      </div>
+      <button class="select-player-panel__cancel" @click="$emit('cancel')">Cancelar</button>
     </div>
-    <button @click="$emit('cancel')">Cancelar</button>
   </div>
 </template>
 
 <style>
 .select-player-panel {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   z-index: 102;
   align-items: center;
   padding-top: 50px;
   gap: 15px;
 }
+.select-player-panel__container {
+  width: 80%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 .select-player-panel__player {
   font-size: 18px;
   padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  margin: 5px;
 }
 .select-player-panel__text {
-  width: 80%;
-  margin: 0 auto;
-  margin-bottom: 20px;
   font-size: 20px;
   text-align: center;
   font-weight: 700;
+  margin-bottom: 55px;
+  line-height: 24px;
+}
+.select-player-panel__cancel {
+  margin: 50px auto;
+  display: block;
 }
 </style>

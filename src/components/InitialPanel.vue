@@ -19,10 +19,7 @@ const code = ref('')
 </script>
 
 <template>
-  <div
-    class="inital-panel-container"
-    v-if="!isUserValid && gameState !== StateEnum.STARTED && gameState !== StateEnum.FINISHED"
-  >
+  <div class="inital-panel-container" v-if="!isUserValid">
     <div class="inital-panel">
       <h2 class="inital-panel__title">¡Bienvenido a Planta!</h2>
       <p class="inital-panel__text"><strong>Código de validación</strong></p>
