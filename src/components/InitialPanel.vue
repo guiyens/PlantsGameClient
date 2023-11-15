@@ -63,7 +63,10 @@ const code = ref('')
       />
       <div class="inital-panel__title inital-panel__title--no-margin-top">
         <p class="inital-panel__text inital-panel__text--24 inital-panel__title--green">
-          <strong>¡ Ya estas dentro {{ nameConnected }} !</strong>
+          <strong
+            >¡ Ya estas dentro <br />
+            {{ nameConnected }} !</strong
+          >
         </p>
         <p class="inital-panel__text">Esperando a más jugadores</p>
         <p class="inital-panel__text--24">({{ players?.length }} / {{ maxPlayers }})</p>
@@ -82,9 +85,10 @@ const code = ref('')
 <style>
 .inital-panel-container {
   background: url('@/assets/images/game_elements/fondo-inicio.png') center center;
-  height: 100vh;
+  height: 100%;
   background-size: auto 100%;
-  position: relative;
+  position: absolute;
+  width: 100%;
 }
 .inital-panel {
   padding: 50px 20px;
