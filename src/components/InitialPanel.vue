@@ -125,7 +125,7 @@ const code = ref('')
   font-weight: 300;
 }
 .inital-panel__input {
-  width: 300px;
+  width: 100%;
   margin: 10px auto;
   font-size: 17px;
   text-align: center;
