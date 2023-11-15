@@ -10,48 +10,65 @@ const props = defineProps({
 
 <template>
   <div class="specialCard__panel">
-    <h4 class="specialCard__title">Se ha encontrado una carta Especial</h4>
-    <img class="specialCard__image" :src="getImage(SpecialCardFound as ICard)" />
-    <p class="specialCard__text" v-if="SpecialCardFound?.type === 'CROP_ROTATION'">
-      Todos los jugadores rotan su cultivo al adversario situado a su derecha. Todas las cartas
-      salvo los frutos cosechados.
-    </p>
-    <p class="specialCard__text" v-if="SpecialCardFound?.type === 'DISASTER'">
-      Se han eliminado las flores que todos los jugadores tenían en sus cultivos
-    </p>
-    <p class="specialCard__text" v-if="SpecialCardFound?.type === 'RELAXED_SEASON'">
-      Todas las cartes destrés que los jugadores tenían en sus cultivos se han mandado al mazo de
-      descartes
-    </p>
-    <button class="specialCard__button" @click="$emit('closeSpecialCardPanel')">Cerrar</button>
+    <div class="specialCard__container">
+      <h4 class="specialCard__title">
+        Se ha encontrado <br />
+        una carta Especial
+      </h4>
+      <img class="specialCard__image" :src="getImage(SpecialCardFound as ICard)" />
+      <p class="specialCard__text" v-if="SpecialCardFound?.type === 'CROP_ROTATION'">
+        Todos los jugadores rotan su cultivo al adversario situado a su derecha. Todas las cartas
+        salvo los frutos cosechados.
+      </p>
+      <p class="specialCard__text" v-if="SpecialCardFound?.type === 'DISASTER'">
+        Se han eliminado las flores que todos los jugadores tenían en sus cultivos
+      </p>
+      <p class="specialCard__text" v-if="SpecialCardFound?.type === 'RELAXED_SEASON'">
+        Todas las cartas de estrés que los jugadores tenían en sus cultivos se han mandado al mazo
+        de descartes
+      </p>
+      <button class="specialCard__button" @click="$emit('closeSpecialCardPanel')">Cerrar</button>
+    </div>
   </div>
 </template>
 
 <style>
 .specialCard__panel {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.specialCard__container {
+  width: 80%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .specialCard__title {
-  font-size: 30px;
+  font-size: 20px;
   text-align: center;
-  margin-top: 30px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  line-height: 24px;
 }
 .specialCard__image {
-  width: 200px;
+  width: 150px;
   display: block;
   margin: 30px auto 0;
 }
 .specialCard__text {
-  font-size: 15px;
+  font-size: 17px;
   text-align: center;
   margin: 30px auto 0;
-  width: 500px;
+  line-height: 22px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
 }
 .specialCard__button {
   display: block;

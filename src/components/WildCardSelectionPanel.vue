@@ -37,21 +37,18 @@ import { getImage } from '@/utils/getImage'
   gap: 15px;
 }
 .wildcardSelection__container {
-  padding: 50px 20px;
   width: 80%;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 5px;
 }
 .wildcardSelection__text {
-  font-size: 21px;
+  font-size: 18px;
   text-align: center;
   font-weight: 500;
   margin-bottom: 25px;
-  line-height: 25px;
+  line-height: 22px;
 }
 .wildcardSelection__cards {
   display: flex;

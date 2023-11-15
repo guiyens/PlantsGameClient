@@ -96,9 +96,6 @@ const props = defineProps({
 }
 button.action--cancel {
   background-color: rgb(224, 102, 102);
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  margin-top: 5px;
   font-size: 15px;
 }
 .action-desc {
