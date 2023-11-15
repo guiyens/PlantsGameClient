@@ -133,9 +133,10 @@ const code = ref('')
   margin: 75px auto 0;
   text-align: center;
   color: rgb(208, 33, 33);
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 5px;
   border: 1px solid;
+  line-height: 21px;
 }
 
 @keyframes fadeIn {
