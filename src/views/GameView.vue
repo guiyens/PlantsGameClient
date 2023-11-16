@@ -299,10 +299,16 @@ socket.on('reconnect', (attempt) => {
     <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
     <div v-if="!gameEnded">
       <!-- Error =========-->
-      <p class="error-container" v-if="error">
-        <span class="error-icon">🚫</span>
-        <span class="error-text"> {{ error }}</span>
-      </p>
+      <div class="error-container" v-if="error">
+        <div class="inital-panel-container">
+          <div class="inital-panel">
+            <h2 class="inital-panel__title inital-panel__text--red">¡Lo sentimos!</h2>
+            <p class="inital-panel__text inital-panel__text--red">
+              <strong>{{ error }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
       <!-- Initial Panel =========-->
       <InitialPanel
         v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
@@ -553,19 +559,11 @@ socket.on('reconnect', (attempt) => {
 }
 
 .error-container {
-  background-color: rgb(224, 102, 102);
-  text-align: center;
-  font-size: 26px;
-  padding: 0 50px;
-  color: #fff;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.error-icon {
-  margin-top: 100px;
-  font-size: 80px;
+  background: url('@/assets/images/game_elements/fondo-inicio.png') center center;
+  height: 100%;
+  background-size: auto 100%;
+  position: absolute;
+  width: 100%;
 }
 
 button {
