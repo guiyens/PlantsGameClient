@@ -284,6 +284,9 @@ socket.on('SpecialCardFound', function (specialCardInfo: { newGame: IGame; speci
 socket.on('winnerGame', function (winnerSocketId: string) {
   gameEnded.value = true
   areYouWinner.value = socketId.value === winnerSocketId
+  setTimeout(() => {
+    location.reload()
+  }, 3000)
 })
 
 socket.on('error', (err) => {
@@ -482,9 +485,10 @@ socket.on('reconnect', (attempt) => {
   background-color: red;
   top: 50px;
   right: 50px;
+  z-index: 1000;
 }
 .server-flag--connected {
-  background-color: green;
+  background-color: #22f122;
 }
 .players-selector {
   display: flex;

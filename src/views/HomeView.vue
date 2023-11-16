@@ -109,9 +109,7 @@ const texts = ref([
         PLANTA es un juego didáctico de cartas que tiene como objetivo difundir conceptos de
         fisiología y producción vegetal de manera entretenida.
       </p>
-      <router-link to="/game">
-        <button class="play-button">Jugar</button>
-      </router-link>
+      <router-link tag="div" class="play-button" to="/game"> Jugar </router-link>
       <img class="logo2" src="@/assets/images/logo2.png" alt="" />
       <img class="logo1" src="@/assets/images/logo1.png" alt="" />
     </div>
@@ -224,6 +222,10 @@ const texts = ref([
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+  color: #333;
+  width: 100px;
+  text-decoration: none;
+  text-align: center;
   @media only screen and (max-width: 768px) {
     margin-top: 30px;
   }
