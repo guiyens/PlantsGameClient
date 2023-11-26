@@ -15,9 +15,9 @@ const props = defineProps({
 
 const { playerCrop } = toRefs(props)
 
-const playersBar = 44.8
+const playersBar = 30
 const crop = 467
-const cards = 116.45
+const cards = 122
 const buttons = 36
 const totalElementsHeight = playersBar + crop + cards + buttons
 const viewportHeight = window.innerHeight

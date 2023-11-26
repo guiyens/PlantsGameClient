@@ -42,7 +42,7 @@ const props = defineProps({
   line-height: 24px;
 }
 .specialCard__image {
-  width: 70%;
+  width: 85%;
   display: block;
   margin: 30px auto 0;
 }

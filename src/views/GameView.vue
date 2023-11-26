@@ -446,7 +446,7 @@ socket.on('reconnect', (attempt) => {
 .main-container {
   width: 360px;
   margin: 0 auto;
-  background-color: rgb(29, 155, 86);
+  background-color: rgb(44 187 109);
   @media (max-width: 768px) {
     width: 100%;
   }
