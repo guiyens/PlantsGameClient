@@ -37,12 +37,19 @@ const areYouWinner = ref(false)
 const selectedWildcardToChange: Ref<ICard | undefined> = ref(undefined)
 const isSelectionCardFromWildcard = ref(false)
 const isSpecialCardFound = ref(false)
+const isBrowserSupported = ref(false)
 const SpecialCardFound: Ref<ICard | undefined> = ref(undefined)
 const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
 const lastActions: Ref<Array<string>> = ref([])
 const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
+
+if (navigator.userAgent.indexOf('Chrome') > -1) {
+  isBrowserSupported.value = true
+} else {
+  alert('Lo sentimos, pero solo puedes jugar con Google Chrome')
+}
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -302,7 +309,7 @@ socket.on('reconnect', (attempt) => {
 </script>
 
 <template>
-  <main class="main-container">
+  <main v-if="isBrowserSupported" class="main-container">
     <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
     <div v-if="!gameEnded">
       <!-- Error =========-->
@@ -439,7 +446,7 @@ socket.on('reconnect', (attempt) => {
 .main-container {
   width: 360px;
   margin: 0 auto;
-  background-color: #67360b;
+  background-color: rgb(29, 155, 86);
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -456,12 +463,13 @@ socket.on('reconnect', (attempt) => {
   gap: 10px;
 }
 .card {
-  width: 80px;
+  width: 73px;
   text-align: center;
   height: 100%;
 }
 .player-cards--selecting {
-  border: 3px dashed green;
+  border: 3px dashed white;
+  height: 111px;
 }
 .card.player-cards--selected {
   border: 3px solid green;

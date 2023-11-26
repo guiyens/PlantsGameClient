@@ -59,11 +59,11 @@ const props = defineProps({
     </div>
     <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToPlay">
       <p class="action-text">Selecciona la carta que quieres jugar</p>
-      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
+      <button class="action action--cancel m-b-5" @click="$emit('cancel')">Cancelar</button>
     </div>
     <div class="action-desc" v-if="userActive === socketId && isSelectionActiveChoosePlayer">
       <p class="action-text">Selecciona un jugador para aplicarle la carta de estres</p>
-      <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
+      <button class="action action--cancel m-b-5" @click="$emit('cancel')">Cancelar</button>
     </div>
   </div>
 </template>
@@ -98,7 +98,6 @@ button.action--cancel {
 }
 .action-desc {
   display: flex;
-  padding-bottom: 5px;
 }
 .action-desc--discard {
   display: block;

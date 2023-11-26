@@ -46,10 +46,12 @@
 
 html {
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   height: 100%;
+  overflow: hidden;
   color: var(--color-text);
   transition:
     color 0.5s,
@@ -76,4 +78,8 @@ body {
 
 strong {
   font-weight: 700;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
 }
