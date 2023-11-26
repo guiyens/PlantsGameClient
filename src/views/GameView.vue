@@ -500,8 +500,8 @@ socket.on('reconnect', (attempt) => {
   height: 10px;
   border-radius: 50%;
   background-color: red;
-  top: 50px;
-  right: 50px;
+  top: 10px;
+  right: 10px;
   z-index: 1000;
 }
 .server-flag--connected {
