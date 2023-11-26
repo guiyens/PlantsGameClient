@@ -15,6 +15,7 @@ import GameEndedPanel from '@/components/GameEndedPanel.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import InitialPanel from '@/components/InitialPanel.vue'
 import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
+import ZoomCard from '@/components/ZoomCard.vue'
 import PlayerLog from '@/components/PlayerLog.vue'
 const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgameserver.onrender.com'
 
@@ -41,6 +42,7 @@ const errorNotValid = ref('')
 const isServerConnected = ref(false)
 const userDisplayed = ref('')
 const lastActions: Ref<Array<string>> = ref([])
+const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
 
 const playerCards: ComputedRef<Array<ICard>> = computed(() => {
   const playerFound = game.value.players?.find(
@@ -92,6 +94,8 @@ function selectCard(card: ICard) {
     sendCardToplay(card)
     return
   }
+
+  selectedCardToZoom.value = card
 }
 
 function selectCardsToDiscard(card: ICard) {
@@ -286,7 +290,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
   areYouWinner.value = socketId.value === winnerSocketId
   setTimeout(() => {
     location.reload()
-  }, 3000)
+  }, 7000)
 })
 
 socket.on('error', (err) => {
@@ -368,14 +372,6 @@ socket.on('reconnect', (attempt) => {
       <!--========Player =========-->
       <div class="player" v-if="socketId === userDisplayed">
         <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
-        <PlayerCards
-          :playerCards="playerCards"
-          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-          :isSelectionActiveToPlay="isSelectionActiveToPlay"
-          :selectedCardsToDiscard="selectedCardsToDiscard"
-          :playerCrop="playerCrop"
-          @selectCard="selectCard"
-        ></PlayerCards>
         <PlayerControls
           v-if="nameConnected && game.state === StateEnum.STARTED"
           :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
@@ -391,6 +387,14 @@ socket.on('reconnect', (attempt) => {
           @cancel="cancel"
           @sendDisscards="sendDisscards"
         ></PlayerControls>
+        <PlayerCards
+          :playerCards="playerCards"
+          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+          :isSelectionActiveToPlay="isSelectionActiveToPlay"
+          :selectedCardsToDiscard="selectedCardsToDiscard"
+          :playerCrop="playerCrop"
+          @selectCard="selectCard"
+        ></PlayerCards>
       </div>
       <!--======== wildcard Selection panel =========-->
       <WildCardSelectionPanel
@@ -423,6 +427,11 @@ socket.on('reconnect', (attempt) => {
       @closeNotifications="closeNotifications"
       :lastActions="lastActions"
     ></Notifications>
+    <ZoomCard
+      v-if="selectedCardToZoom"
+      @closeSpecialZoomCard="selectedCardToZoom = undefined"
+      :card="selectedCardToZoom"
+    ></ZoomCard>
   </main>
 </template>
 
