@@ -19,6 +19,10 @@ import ZoomCard from '@/components/ZoomCard.vue'
 import PlayerLog from '@/components/PlayerLog.vue'
 const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgameserver.onrender.com'
 
+// const url = import.meta.env.DEV
+//   ? 'https://eager-rice-smash.loca.lt'
+//   : 'https://plantsgameserver.onrender.com'
+
 var socket = io(url, { transports: ['websocket'] })
 
 const isUserValid = ref(import.meta.env.DEV)
@@ -169,10 +173,7 @@ function closeSpecialCardPanel() {
 }
 
 function setCode(code: string) {
-  isUserValid.value = code === 'Pl4nt4'
-  if (!(code === 'Pl4nt4')) {
-    errorNotValid.value = '¡El codigo no es valido!'
-  }
+  socket.emit('ValidateUser', code)
 }
 
 function startGameNow() {
@@ -227,6 +228,13 @@ socket.on('connect', function () {
   isServerConnected.value = true
   isUserValid.value = import.meta.env.DEV
   game.value = {}
+})
+
+socket.on('ValidateUser', function (isValid) {
+  isUserValid.value = isValid
+  if (!isValid) {
+    errorNotValid.value = '¡El codigo no es valido!'
+  }
 })
 
 socket.on('disconnect', function (reason) {
