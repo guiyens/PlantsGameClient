@@ -76,6 +76,8 @@ function isElementActive(element: string, type: string) {
 .crop {
   display: flex;
   justify-content: center;
+  background: url('/src/assets/images/game_elements/Fondo.png') center -160px;
+  background-size: 900px;
 }
 .crop__container {
   border: 1px solid #333;
@@ -107,10 +109,14 @@ function isElementActive(element: string, type: string) {
 }
 .crop-elements {
   position: relative;
-  width: 310%;
+  width: 100%;
   height: 467px;
   overflow: hidden;
-  background: url('@/assets/images/game_elements/Fondo.png') center 32%;
+  background: url('@/assets/images/game_elements/Fondo.png') cover;
+
+  @media (min-width: 768px) {
+    width: 385px;
+  }
 }
 
 .crop-element {
@@ -129,12 +135,14 @@ function isElementActive(element: string, type: string) {
 .fruits-count {
   position: absolute;
   z-index: 100;
-  top: 10px;
-  border: 1px solid #5e5d5d;
-  color: #929292;
-  padding: 5px 10px;
+  top: 0px;
+  color: #595959;
+  padding: 9px 17px;
   display: flex;
   gap: 5px;
+  background: #fff;
+  font-size: 17px;
+  font-weight: 300;
 }
 
 /* .flowers-count__image,
@@ -143,10 +151,10 @@ function isElementActive(element: string, type: string) {
 } */
 
 .flowers-count {
-  left: 10px;
+  left: 0px;
 }
 
 .fruits-count {
-  right: 10px;
+  right: 0px;
 }
 </style>

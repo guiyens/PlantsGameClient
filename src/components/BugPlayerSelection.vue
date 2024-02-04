@@ -66,12 +66,24 @@ function isExtresSettableOnPlayer(player: IPlayer): boolean {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  @media (min-width: 768px) {
+    background-color: rgba(255, 255, 255, 1);
+    padding: 50px 30px;
+  }
 }
 .select-player-panel__player {
   font-size: 18px;
   padding: 5px 10px;
   background-color: rgba(255, 255, 255, 0.9);
   margin: 5px;
+  @media (min-width: 768px) {
+    width: 50%;
+    margin: 0 auto;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+  }
 }
 .select-player-panel__text {
   font-size: 20px;
@@ -79,6 +91,14 @@ function isExtresSettableOnPlayer(player: IPlayer): boolean {
   font-weight: 700;
   margin-bottom: 55px;
   line-height: 24px;
+  @media (min-width: 768px) {
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 50px;
+    line-height: 30px;
+    width: 400px;
+    margin: 0 auto 55px;
+  }
 }
 .select-player-panel__cancel {
   margin: 50px auto;

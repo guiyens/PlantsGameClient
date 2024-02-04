@@ -21,6 +21,7 @@ const cards = 122
 const buttons = 36
 const totalElementsHeight = playersBar + crop + cards + buttons
 const viewportHeight = window.innerHeight
+const viewportWidth = window.innerWidth
 const whiteSpace = viewportHeight - totalElementsHeight
 const playerCardsMargin = whiteSpace / 2
 
@@ -44,11 +45,8 @@ function isCardPlayable(card: ICard): boolean {
 </script>
 
 <template>
-  <div
-    class="player-cards"
-    v-if="playerCards && playerCards.length"
-    :style="{ 'padding-top': `${playerCardsMargin}px`, 'padding-bottom': `${playerCardsMargin}px` }"
-  >
+  <h3 v-if="playerCards && playerCards.length" class="player-cards__title">Tus cartas</h3>
+  <div class="player-cards" v-if="playerCards && playerCards.length">
     <div
       class="card"
       v-for="(card, index) in playerCards"
@@ -66,4 +64,18 @@ function isCardPlayable(card: ICard): boolean {
   </div>
 </template>
 
-<style></style>
+<style>
+.player-cards__title {
+  display: none;
+  @media (min-width: 768px) {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    background: #fff;
+    padding: 10px;
+    line-height: 20px;
+  }
+}
+</style>

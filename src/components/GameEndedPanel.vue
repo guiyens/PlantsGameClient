@@ -23,6 +23,11 @@ const props = defineProps({
   left: 0;
   background: url('@/assets/images/game_elements/Pantalla-has-perdido.png') center 32%;
   background-size: 730px auto;
+  @media (min-width: 768px) {
+    width: auto;
+    position: static;
+    height: 100%;
+  }
 }
 .gameEndedPanel--winner {
   background: url('@/assets/images/game_elements/Pantalla-Ganador.png') center 32%;

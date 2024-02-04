@@ -25,7 +25,7 @@ const props = defineProps({
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 .specialCard__container {
   width: 80%;
@@ -42,9 +42,12 @@ const props = defineProps({
   line-height: 24px;
 }
 .specialCard__image {
-  width: 85%;
+  width: 70%;
   display: block;
   margin: 30px auto 0;
+  @media (min-width: 768px) {
+    width: 24%;
+  }
 }
 .specialCard__button {
   display: block;

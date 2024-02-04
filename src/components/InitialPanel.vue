@@ -19,8 +19,8 @@ const code = ref('')
 </script>
 
 <template>
-  <div class="inital-panel-container" v-if="!isUserValid">
-    <div class="inital-panel">
+  <div class="inital-panel__container">
+    <div class="inital-panel" v-if="!isUserValid">
       <h2 class="inital-panel__title">¡Bienvenido a Planta!</h2>
       <p class="inital-panel__text"><strong>Código de validación</strong></p>
       <p class="inital-panel__text inital-panel__text--red" v-if="errorNotValid !== ''">
@@ -31,71 +31,62 @@ const code = ref('')
       </div>
       <button class="inital-panel__button" @click="$emit('setCode', code)">Enviar</button>
     </div>
-  </div>
-  <div
-    class="inital-panel-container"
-    v-if="isUserValid && gameState !== StateEnum.STARTED && gameState !== StateEnum.FINISHED"
-  >
-    <div class="inital-panel" v-if="!nameConnected">
-      <h2 class="inital-panel__title inital-panel__title--green inital-panel__title--border">
-        <strong>¡Perfecto!</strong> <br />
-        Ya puedes jugar
-      </h2>
-      <p class="inital-panel__text"><strong>¿Cuál es tu nombre?</strong></p>
-      <div>
-        <input class="inital-panel__input" autofocus type="text" v-model="name" />
+
+    <div v-if="isUserValid && gameState !== StateEnum.STARTED && gameState !== StateEnum.FINISHED">
+      <div class="inital-panel" v-if="!nameConnected">
+        <h2 class="inital-panel__title inital-panel__title--green inital-panel__title--border">
+          <strong>¡Perfecto!</strong> <br />
+          Ya puedes jugar
+        </h2>
+        <p class="inital-panel__text"><strong>¿Cuál es tu nombre?</strong></p>
+        <div>
+          <input class="inital-panel__input" autofocus type="text" v-model="name" />
+        </div>
+        <button class="inital-panel__button" @click="$emit('addUser', name)">Enviar</button>
       </div>
-      <button class="inital-panel__button" @click="$emit('addUser', name)">Enviar</button>
-    </div>
-    <div class="inital-panel" v-if="nameConnected && gameState === StateEnum.WAITING">
-      <p class="inital-panel__alert">
-        A partir de aquí <strong>si cambias la url</strong> o
-        <strong>actualizas la página</strong> saldrás de la partida y
-        <strong>no podrás volver a entrar</strong>
-      </p>
-      <img
-        class="inital-panel__image"
-        :src="getImage({ type: 'semilla', image: 'semilla.png' } as ICard)"
-        alt=""
-      />
-      <div class="inital-panel__title inital-panel__title--no-margin-top">
-        <p class="inital-panel__text inital-panel__text--24 inital-panel__title--green">
-          <strong
-            >¡ Ya estas dentro <br />
-            {{ nameConnected }} !</strong
-          >
+      <div class="inital-panel" v-if="nameConnected && gameState === StateEnum.WAITING">
+        <p class="inital-panel__alert">
+          A partir de aquí <strong>si cambias la url</strong> o
+          <strong>actualizas la página</strong> saldrás de la partida y
+          <strong>no podrás volver a entrar</strong>
         </p>
-        <p class="inital-panel__text">Esperando a más jugadores</p>
-        <p class="inital-panel__text--24">({{ players?.length }} / {{ maxPlayers }})</p>
+        <img
+          class="inital-panel__image"
+          :src="getImage({ type: 'semilla', image: 'semilla.png' } as ICard)"
+          alt=""
+        />
+        <div class="inital-panel__title inital-panel__title--no-margin-top">
+          <p class="inital-panel__text inital-panel__text--24 inital-panel__title--green">
+            <strong>¡ Ya estas dentro {{ nameConnected }} !</strong>
+          </p>
+          <p class="inital-panel__text">Esperando a más jugadores</p>
+          <p class="inital-panel__text--24">({{ players?.length }} / {{ maxPlayers }})</p>
+        </div>
+        <button
+          v-if="!!players && players.length > 1"
+          class="inital-panel__start"
+          @click="$emit('startGame')"
+        >
+          Comenzar
+        </button>
       </div>
-      <button
-        v-if="!!players && players.length > 1"
-        class="inital-panel__start"
-        @click="$emit('startGame')"
-      >
-        Comenzar
-      </button>
     </div>
   </div>
 </template>
 
 <style>
-.inital-panel-container {
-  background: url('@/assets/images/game_elements/fondo-inicio.png') center center;
-  height: 100%;
-  background-size: auto 100%;
-  position: absolute;
-  width: 100%;
-}
 .inital-panel {
   padding: 50px 20px;
-  width: 80%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 5px;
+}
+.inital-panel__container {
+  width: 90%;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.8);
+  @media (min-width: 768px) {
+    margin: 60px auto 0;
+    background: none;
+    width: 70%;
+  }
 }
 .inital-panel__title {
   text-align: center;
@@ -160,6 +151,8 @@ const code = ref('')
 .inital-panel__start {
   display: block;
   margin: 20px auto;
+  width: 150px;
+  font-size: 15px;
 }
 
 .inital-panel__alert {

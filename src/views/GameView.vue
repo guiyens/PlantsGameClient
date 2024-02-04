@@ -319,126 +319,132 @@ socket.on('reconnect', (attempt) => {
 <template>
   <main v-if="isBrowserSupported" class="main-container">
     <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
-    <div v-if="!gameEnded">
-      <!-- Error =========-->
-      <div class="error-container" v-if="error">
-        <div class="inital-panel-container">
-          <div class="inital-panel">
-            <h2 class="inital-panel__title inital-panel__text--red">¡Lo sentimos!</h2>
-            <p class="inital-panel__text inital-panel__text--red">
-              <strong>{{ error }}</strong>
-            </p>
+    <div class="container">
+      <div v-if="!gameEnded">
+        <!-- Error =========-->
+        <div class="error-container" v-if="error">
+          <div class="inital-panel-container">
+            <div class="inital-panel">
+              <h2 class="inital-panel__title inital-panel__text--red">¡Lo sentimos!</h2>
+              <p class="inital-panel__text inital-panel__text--red">
+                <strong>{{ error }}</strong>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Initial Panel =========-->
-      <InitialPanel
-        v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
-        :nameConnected="nameConnected"
-        :gameState="game.state"
-        :isUserValid="isUserValid"
-        :errorNotValid="errorNotValid"
-        :players="game.players"
-        :maxPlayers="game.maxPlayers"
-        @addUser="addUser"
-        @setCode="setCode"
-        @startGame="startGameNow"
-      ></InitialPanel>
-      <!--======== Players Selector =========-->
-      <div class="players-selector" v-if="nameConnected && game.state !== StateEnum.WAITING">
-        <div
-          class="player-selector"
-          @click="displayPlayer(player.socketId)"
-          v-for="player in game.players"
-          :key="player.socketId"
-          :class="{
-            'player-selector--active': player.socketId === userDisplayed,
-            'player-selector--player': player.socketId === socketId,
-            'player-selector--turn': player.socketId === game.userActive
-          }"
-        >
-          {{ player.socketId === socketId ? 'Yo' : player.name }}
-        </div>
-      </div>
-      <!--======== Players-other =========-->
-      <div v-if="nameConnected && game.state === StateEnum.STARTED">
-        <div
-          class="players-other"
-          v-for="(player, index) in game.players.filter(
-            (player: IPlayer) => player.socketId !== socketId && player.socketId === userDisplayed
-          )"
-          :key="index"
-        >
-          <Crop
-            v-if="player?.crop && game.state !== StateEnum.WAITING"
-            :playerCrop="player.crop"
-            :gameState="game.state"
-          ></Crop>
-          <PlayerLog
-            :logs="
-              game.activityLog?.filter(
-                (element: ILog) => element.player.socketId === player.socketId
-              )
-            "
-            :playerName="player.name"
-          ></PlayerLog>
-        </div>
-      </div>
-      <!--========Player =========-->
-      <div class="player" v-if="socketId === userDisplayed">
-        <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
-        <PlayerControls
-          v-if="nameConnected && game.state === StateEnum.STARTED"
-          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-          :isSelectionActiveToPlay="isSelectionActiveToPlay"
-          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
-          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
-          :selectedCardsToDiscard="selectedCardsToDiscard"
+        <!-- Initial Panel =========-->
+        <InitialPanel
+          v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
+          :nameConnected="nameConnected"
           :gameState="game.state"
-          :userActive="game.userActive"
-          :socketId="socketId"
-          @disscard="disscard"
-          @playCard="playCard"
+          :isUserValid="isUserValid"
+          :errorNotValid="errorNotValid"
+          :players="game.players"
+          :maxPlayers="game.maxPlayers"
+          @addUser="addUser"
+          @setCode="setCode"
+          @startGame="startGameNow"
+        ></InitialPanel>
+        <!--======== Players Selector =========-->
+        <div class="players-selector" v-if="nameConnected && game.state !== StateEnum.WAITING">
+          <div
+            class="player-selector"
+            @click="displayPlayer(player.socketId)"
+            v-for="player in game.players"
+            :key="player.socketId"
+            :class="{
+              'player-selector--active': player.socketId === userDisplayed,
+              'player-selector--player': player.socketId === socketId,
+              'player-selector--turn': player.socketId === game.userActive
+            }"
+          >
+            {{ player.socketId === socketId ? 'Yo' : player.name }}
+          </div>
+        </div>
+        <!--======== Players-other =========-->
+        <div v-if="nameConnected && game.state === StateEnum.STARTED">
+          <div
+            class="players-other"
+            v-for="(player, index) in game.players.filter(
+              (player: IPlayer) => player.socketId !== socketId && player.socketId === userDisplayed
+            )"
+            :key="index"
+          >
+            <Crop
+              v-if="player?.crop && game.state !== StateEnum.WAITING"
+              :playerCrop="player.crop"
+              :gameState="game.state"
+            ></Crop>
+            <div class="actions-and-cards">
+              <PlayerLog
+                :logs="
+                  game.activityLog?.filter(
+                    (element: ILog) => element.player.socketId === player.socketId
+                  )
+                "
+                :playerName="player.name"
+              ></PlayerLog>
+            </div>
+          </div>
+        </div>
+        <!--========Player =========-->
+        <div class="player" v-if="socketId === userDisplayed">
+          <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
+          <div class="actions-and-cards">
+            <PlayerControls
+              v-if="nameConnected && game.state === StateEnum.STARTED"
+              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+              :isSelectionActiveToPlay="isSelectionActiveToPlay"
+              :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+              :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
+              :selectedCardsToDiscard="selectedCardsToDiscard"
+              :gameState="game.state"
+              :userActive="game.userActive"
+              :socketId="socketId"
+              @disscard="disscard"
+              @playCard="playCard"
+              @cancel="cancel"
+              @sendDisscards="sendDisscards"
+            ></PlayerControls>
+            <PlayerCards
+              :playerCards="playerCards"
+              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+              :isSelectionActiveToPlay="isSelectionActiveToPlay"
+              :selectedCardsToDiscard="selectedCardsToDiscard"
+              :playerCrop="playerCrop"
+              @selectCard="selectCard"
+            ></PlayerCards>
+          </div>
+        </div>
+        <!--======== wildcard Selection panel =========-->
+        <WildCardSelectionPanel
+          v-if="isSelectionCardFromWildcard"
+          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
+          @sendWildCard="sendWildCard"
           @cancel="cancel"
-          @sendDisscards="sendDisscards"
-        ></PlayerControls>
-        <PlayerCards
-          :playerCards="playerCards"
-          :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-          :isSelectionActiveToPlay="isSelectionActiveToPlay"
-          :selectedCardsToDiscard="selectedCardsToDiscard"
-          :playerCrop="playerCrop"
-          @selectCard="selectCard"
-        ></PlayerCards>
+        ></WildCardSelectionPanel>
+        <!--======== special Card panel =========-->
+        <SpecialCardPanel
+          v-if="isSpecialCardFound"
+          :SpecialCardFound="SpecialCardFound"
+          @closeSpecialCardPanel="closeSpecialCardPanel"
+        ></SpecialCardPanel>
+        <!--======== selection Player Panel =========-->
+        <BugPlayerSelection
+          v-if="isSelectionActiveChoosePlayer"
+          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+          :selectedExtresCardToPlay="selectedExtresCardToPlay"
+          :players="game.players"
+          :playerId="socketId"
+          @sendExtresCardToplay="sendExtresCardToplay"
+          @cancel="cancel"
+        ></BugPlayerSelection>
       </div>
-      <!--======== wildcard Selection panel =========-->
-      <WildCardSelectionPanel
-        v-if="isSelectionCardFromWildcard"
-        :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
-        @sendWildCard="sendWildCard"
-        @cancel="cancel"
-      ></WildCardSelectionPanel>
-      <!--======== special Card panel =========-->
-      <SpecialCardPanel
-        v-if="isSpecialCardFound"
-        :SpecialCardFound="SpecialCardFound"
-        @closeSpecialCardPanel="closeSpecialCardPanel"
-      ></SpecialCardPanel>
+      <!--======== game Ended Panel =========-->
+      <GameEndedPanel v-if="gameEnded" :areYouWinner="areYouWinner"></GameEndedPanel>
     </div>
-    <!--======== game Ended Panel =========-->
-    <GameEndedPanel v-if="gameEnded" :areYouWinner="areYouWinner"></GameEndedPanel>
-    <!--======== selection Player Panel =========-->
-    <BugPlayerSelection
-      v-if="isSelectionActiveChoosePlayer"
-      :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
-      :selectedExtresCardToPlay="selectedExtresCardToPlay"
-      :players="game.players"
-      :playerId="socketId"
-      @sendExtresCardToplay="sendExtresCardToplay"
-      @cancel="cancel"
-    ></BugPlayerSelection>
     <Notifications
-      v-if="lastActions.length"
+      v-if="true"
       @closeNotifications="closeNotifications"
       :lastActions="lastActions"
     ></Notifications>
@@ -452,11 +458,18 @@ socket.on('reconnect', (attempt) => {
 
 <style>
 .main-container {
-  width: 360px;
+  width: 100%;
   margin: 0 auto;
-  background-color: rgb(44 187 109);
-  @media (max-width: 768px) {
-    width: 100%;
+  background: url('@/assets/images/game_elements/fondo-inicio.png') center;
+  background-size: cover;
+  height: 100vh;
+}
+.actions-and-cards {
+  @media (min-width: 768px) {
+    padding: 0 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
   }
 }
 .cards-container {
@@ -468,20 +481,41 @@ socket.on('reconnect', (attempt) => {
 .player-cards {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 2%;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.8);
+  height: calc(100vh - 530px);
+  @media (min-width: 768px) {
+    order: 1;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+    background: none;
+    height: auto;
+  }
 }
 .card {
-  width: 73px;
   text-align: center;
   height: 100%;
+  font-size: 0;
+  cursor: pointer;
+  @media (min-width: 768px) {
+    height: 200px;
+  }
 }
 .player-cards--selecting {
-  border: 3px dashed white;
-  height: 111px;
+  border: 2px dashed rgb(53, 53, 53);
+  @media (min-width: 768px) {
+    height: auto;
+    border: 3px dashed rgb(53, 53, 53);
+  }
 }
 .card.player-cards--selected {
   border: 3px solid green;
-  margin-top: -10px;
+  transform: scale(1.07);
+  @media (min-width: 768px) {
+    border: 5px solid #bc5d2e;
+  }
 }
 .player-cards--disabled {
   pointer-events: none;
@@ -490,7 +524,12 @@ socket.on('reconnect', (attempt) => {
 }
 
 .card img {
+  height: 100%;
   width: 100%;
+  @media (min-width: 768px) {
+    height: 200px;
+    width: auto;
+  }
 }
 .easter-egg {
   width: 50px;
@@ -500,7 +539,26 @@ socket.on('reconnect', (attempt) => {
   top: 0;
   z-index: 1000;
 }
-.player {
+.player,
+.players-other {
+  height: 520px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    display: flex;
+  }
+}
+.container {
+  @media (min-width: 768px) {
+    width: 778px;
+    height: 613px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
 }
 .server-flag {
   position: fixed;
@@ -517,7 +575,12 @@ socket.on('reconnect', (attempt) => {
 }
 .players-selector {
   display: flex;
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.8);
+  @media (min-width: 768px) {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
 }
 .player-selector {
   color: #444;
@@ -525,16 +588,21 @@ socket.on('reconnect', (attempt) => {
   cursor: pointer;
   flex-grow: 1;
   text-align: center;
-  background-color: #fff;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   flex-wrap: nowrap;
   font-size: 16px;
   text-transform: capitalize;
+  border-right: 1px solid #ddd;
+  @media (min-width: 768px) {
+    max-width: 150px;
+    padding: 5px 6px;
+    background-color: #fff;
+  }
 }
 .player-selector--active {
-  background-color: #67360b;
+  background-color: #5b5b5b;
   color: #fff;
   font-weight: 700;
   text-overflow: inherit;
@@ -555,7 +623,7 @@ socket.on('reconnect', (attempt) => {
 
 @-webkit-keyframes target-fade {
   0% {
-    background-color: rgba(45, 245, 82, 0.8);
+    background-color: #979797;
   }
   100% {
     background-color: rgba(253, 253, 253, 0);
@@ -563,7 +631,7 @@ socket.on('reconnect', (attempt) => {
 }
 @-moz-keyframes target-fade {
   0% {
-    background-color: rgba(45, 245, 82, 0.8);
+    background-color: #979797;
   }
   100% {
     background-color: rgba(253, 253, 253, 0);
@@ -572,18 +640,18 @@ socket.on('reconnect', (attempt) => {
 
 @-webkit-keyframes target-fade-active {
   0% {
-    background-color: rgb(103, 54, 11, 1);
+    background-color: rgb(51, 51, 51, 1);
   }
   100% {
-    background-color: rgb(103, 54, 11, 0.5);
+    background-color: rgb(51, 51, 51, 0.5);
   }
 }
 @-moz-keyframes target-fade-active {
   0% {
-    background-color: rgb(103, 54, 11, 1);
+    background-color: rgb(51, 51, 51, 1);
   }
   100% {
-    background-color: rgb(103, 54, 11, 0.5);
+    background-color: rgb(51, 51, 51, 0.5);
   }
 }
 
@@ -593,6 +661,13 @@ socket.on('reconnect', (attempt) => {
   background-size: auto 100%;
   position: absolute;
   width: 100%;
+  @media (min-width: 768px) {
+    background: none;
+    height: auto;
+    position: static;
+    width: auto;
+    margin-top: 150px;
+  }
 }
 
 button {
@@ -601,6 +676,7 @@ button {
   font-size: 17px !important;
   padding: 8px 15px !important;
   color: white;
+  cursor: pointer;
 }
 button:disabled {
   opacity: 0.5;

@@ -35,6 +35,11 @@ import { getImage } from '@/utils/getImage'
   background-color: rgba(255, 255, 255, 0.7);
   align-items: center;
   gap: 15px;
+  @media (min-width: 768px) {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 1);
+  }
 }
 .wildcardSelection__container {
   width: 80%;
@@ -44,11 +49,16 @@ import { getImage } from '@/utils/getImage'
   transform: translate(-50%, -50%);
 }
 .wildcardSelection__text {
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
   font-weight: 500;
   margin-bottom: 25px;
   line-height: 22px;
+  @media (min-width: 768px) {
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 50px;
+  }
 }
 .wildcardSelection__cards {
   display: flex;
@@ -58,6 +68,16 @@ import { getImage } from '@/utils/getImage'
 }
 .wildcardSelection__card {
   width: 64px !important;
+  @media (min-width: 768px) {
+    height: auto !important;
+    width: auto !important;
+  }
+}
+.wildcardSelection__card img {
+  @media (min-width: 768px) {
+    height: 140px !important;
+    width: auto !important;
+  }
 }
 .wildcardSelection__cancel {
   margin: 30px auto 0;

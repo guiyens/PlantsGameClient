@@ -11,11 +11,11 @@ const props = defineProps({
 <template>
   <div class="specialCard__panel">
     <div class="specialCard__container">
-      <h4 class="specialCard__title">
-        Se ha encontrado <br />
-        una carta Especial
-      </h4>
-      <img class="specialCard__image" :src="getImage(SpecialCardFound as ICard)" />
+      <h4 class="specialCard__title">Se ha encontrado una carta Especial</h4>
+      <img
+        class="specialCard__image specialCard__image--special"
+        :src="getImage(SpecialCardFound as ICard)"
+      />
       <p class="specialCard__text" v-if="SpecialCardFound?.type === 'CROP_ROTATION'">
         Todos los jugadores rotan su cultivo al adversario situado a su derecha. Todas las cartas
         salvo los frutos cosechados.
@@ -41,6 +41,10 @@ const props = defineProps({
   left: 0;
   z-index: 100;
   background-color: rgba(255, 255, 255, 0.8);
+
+  @media (min-width: 768px) {
+    background-color: rgba(255, 255, 255, 1) !important;
+  }
 }
 .specialCard__container {
   width: 80%;
@@ -55,11 +59,19 @@ const props = defineProps({
   font-weight: 700;
   margin-bottom: 25px;
   line-height: 24px;
+  @media (min-width: 768px) {
+    font-size: 28px !important;
+    font-weight: 500 !important;
+    margin-bottom: 35px !important;
+  }
 }
-.specialCard__image {
+.specialCard__image--special {
   width: 150px;
   display: block;
   margin: 30px auto 0;
+  @media (min-width: 768px) {
+    width: 35% !important;
+  }
 }
 .specialCard__text {
   font-size: 17px;
@@ -69,6 +81,9 @@ const props = defineProps({
   background: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border-radius: 5px;
+  @media (min-width: 768px) {
+    width: 400px;
+  }
 }
 .specialCard__button {
   display: block;

@@ -64,25 +64,49 @@ function getActionText(action: EGroup): string {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: #67360b;
+  background-color: rgba(255, 255, 255, 0.8);
   overflow-y: hidden;
+  @media (min-width: 768px) {
+    position: static;
+    height: 600px;
+    bottom: auto;
+    border: 1px solid #ddd;
+  }
 }
 .log__title {
-  font-size: 18px;
-  color: white;
-  font-weight: 700;
-  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 6px 20px;
   text-align: center;
+  background: #fff;
+  @media (min-width: 768px) {
+    display: block;
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    padding: 10px;
+    line-height: 20px;
+    color: rgb(51, 51, 51);
+  }
 }
 .log__actions {
-  background: #a56329;
   padding: 10px 20px;
-  height: calc(100vh - 600px);
+  height: calc(100vh - 535px);
   overflow-y: auto;
+  @media (min-width: 768px) {
+    height: 580px;
+    background-color: rgba(255, 255, 255, 0.6);
+  }
 }
 .log__action {
   font-size: 13px;
-  color: white;
   list-style: none;
+  @media (min-width: 768px) {
+    color: rgb(51, 51, 51);
+  }
+}
+
+.log__action strong {
+  font-weight: 600;
 }
 </style>

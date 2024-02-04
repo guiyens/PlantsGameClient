@@ -45,7 +45,6 @@ const props = defineProps({
       Jugar carta
     </button>
     <div class="action-desc--discard" v-if="userActive === socketId && isSelectionActiveToDiscard">
-      <p class="action-text action-text--discard">Selecciona las cartas y confirma</p>
       <div class="action-desc">
         <button class="action action--cancel" @click="$emit('cancel')">Cancelar</button>
         <button
@@ -57,10 +56,13 @@ const props = defineProps({
         </button>
       </div>
     </div>
-    <div class="action-desc" v-if="userActive === socketId && isSelectionActiveToPlay">
-      <p class="action-text">Selecciona la carta que quieres jugar</p>
-      <button class="action action--cancel m-b-5" @click="$emit('cancel')">Cancelar</button>
-    </div>
+    <button
+      class="action action--cancel"
+      v-if="userActive === socketId && isSelectionActiveToPlay"
+      @click="$emit('cancel')"
+    >
+      Cancelar
+    </button>
     <div class="action-desc" v-if="userActive === socketId && isSelectionActiveChoosePlayer">
       <p class="action-text">Selecciona un jugador para aplicarle la carta de estres</p>
       <button class="action action--cancel m-b-5" @click="$emit('cancel')">Cancelar</button>
@@ -79,18 +81,29 @@ const props = defineProps({
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: #67360b;
+  background: rgba(255, 255, 255, 0.8);
+
+  @media (min-width: 768px) {
+    order: 2;
+    margin-top: 15px;
+    background-color: transparent;
+    gap: 10px;
+  }
 }
 .action {
   flex-grow: 1;
 }
 .action-text {
-  color: white;
+  color: rgb(51, 51, 51);
   font-weight: normal;
   padding: 5px 10px 5px 20px;
   line-height: 20px;
   width: 90%;
   text-align: center;
+  font-size: 12px;
+  @media (min-width: 768px) {
+    font-size: 15px;
+  }
 }
 button.action--cancel {
   background-color: rgb(224, 102, 102);
@@ -98,6 +111,10 @@ button.action--cancel {
 }
 .action-desc {
   display: flex;
+
+  @media (min-width: 768px) {
+    gap: 10px;
+  }
 }
 .action-desc--discard {
   display: block;
