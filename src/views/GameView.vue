@@ -81,7 +81,11 @@ function addUser(name: string) {
 }
 
 function disscard() {
+  lastActions.value.push('Selecciona las cartas que quieres descartar')
   isSelectionActiveToDiscard.value = true
+  setTimeout(function () {
+    lastActions.value = []
+  }, 4000)
 }
 
 function selectCard(card: ICard) {
@@ -141,7 +145,11 @@ function sendDisscards() {
 }
 
 function playCard() {
+  lastActions.value.push('Selecciona la carta que quieres jugar')
   isSelectionActiveToPlay.value = true
+  setTimeout(function () {
+    lastActions.value = []
+  }, 1000)
 }
 
 function sendCardToplay(card: ICard) {
@@ -604,7 +612,7 @@ socket.on('reconnect', (attempt) => {
 .player-selector--active {
   background-color: #5b5b5b;
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   text-overflow: inherit;
   overflow: inherit;
   max-width: 120px;
