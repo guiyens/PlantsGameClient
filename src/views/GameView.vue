@@ -504,7 +504,7 @@ socket.on('reconnect', (attempt) => {
 }
 .card {
   text-align: center;
-  height: 100%;
+  height: 65%;
   font-size: 0;
   cursor: pointer;
   @media (min-width: 768px) {
@@ -532,7 +532,7 @@ socket.on('reconnect', (attempt) => {
 }
 
 .card img {
-  height: 65%;
+  height: 100%;
   width: auto;
   @media (min-width: 768px) {
     height: 200px;
