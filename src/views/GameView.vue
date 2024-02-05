@@ -533,7 +533,7 @@ socket.on('reconnect', (attempt) => {
 
 .card img {
   height: 100%;
-  width: 100%;
+  width: auto;
   @media (min-width: 768px) {
     height: 200px;
     width: auto;
