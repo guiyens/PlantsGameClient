@@ -519,11 +519,21 @@ socket.on('reconnect', (attempt) => {
   }
 }
 .card.player-cards--selected {
-  border: 3px solid green;
-  transform: scale(1.07);
-  @media (min-width: 768px) {
-    border: 5px solid #bc5d2e;
-  }
+  position: relative;
+  border: none;
+}
+.card.player-cards--selected::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8)
+    url('https://static.vecteezy.com/system/resources/previews/004/581/271/non_2x/trash-can-icon-garbage-bin-with-lid-delete-symbol-illustration-free-vector.jpg')
+    no-repeat center;
+  background-size: auto 43%;
+  left: 0;
+  top: 0;
+  opacity: 0.8;
 }
 .player-cards--disabled {
   pointer-events: none;

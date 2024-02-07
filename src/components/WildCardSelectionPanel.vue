@@ -74,6 +74,8 @@ import { getImage } from '@/utils/getImage'
   }
 }
 .wildcardSelection__card img {
+  height: auto !important;
+  width: 100% !important;
   @media (min-width: 768px) {
     height: 140px !important;
     width: auto !important;
