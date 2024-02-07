@@ -489,7 +489,7 @@ socket.on('reconnect', (attempt) => {
 .player-cards {
   display: flex;
   justify-content: center;
-  gap: 2%;
+  gap: 5px;
   padding: 5px;
   background: rgba(255, 255, 255, 0.8);
   height: calc(100vh - 530px);
