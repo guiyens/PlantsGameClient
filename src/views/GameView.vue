@@ -49,7 +49,7 @@ const userDisplayed = ref('')
 const lastActions: Ref<Array<string>> = ref([])
 const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
 
-if (navigator.userAgent.indexOf('Chrome') > -1) {
+if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('CriOS') > -1) {
   isBrowserSupported.value = true
 } else {
   alert('Lo sentimos, pero solo puedes jugar con Google Chrome')
