@@ -229,6 +229,7 @@ function getActionText(action: EGroup): string {
 }
 
 socket.on('connect', function () {
+  console.log('connected')
   isServerConnected.value = true
   isUserValid.value = import.meta.env.DEV
   game.value = {}
@@ -313,6 +314,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
 })
 
 socket.on('error', (err) => {
+  console.log(err)
   isServerConnected.value = false
 })
 socket.on('reconnect', (attempt) => {
