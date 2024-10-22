@@ -17,11 +17,7 @@ import InitialPanel from '@/components/InitialPanel.vue'
 import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
 import ZoomCard from '@/components/ZoomCard.vue'
 import PlayerLog from '@/components/PlayerLog.vue'
-const url = import.meta.env.DEV ? 'http://localhost:3000' : 'https://plantsgameserver.onrender.com'
-
-// const url = import.meta.env.DEV
-//   ? 'https://eager-rice-smash.loca.lt'
-//   : 'https://plantsgameserver.onrender.com'
+const url = 'http://localhost:3000'
 
 var socket = io(url, { transports: ['websocket'] })
 
