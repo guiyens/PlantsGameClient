@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from 'axios'
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { io } from 'socket.io-client'
 import { StateEnum, type IGame } from '@/Infertaces/IGame'
@@ -44,6 +45,15 @@ const isServerConnected = ref(false)
 const userDisplayed = ref('')
 const lastActions: Ref<Array<string>> = ref([])
 const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
+
+axios
+  .get('/')
+  .then(function (response) {
+    console.log(response)
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
 
 if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('CriOS') > -1) {
   isBrowserSupported.value = true
