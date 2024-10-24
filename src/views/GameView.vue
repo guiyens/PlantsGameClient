@@ -47,7 +47,7 @@ const lastActions: Ref<Array<string>> = ref([])
 const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
 
 axios
-  .get('http://127.0.0.1:3000/hola')
+  .get('http://193.146.101.243/:3000/hola')
   .then(function (response) {
     console.log(response)
   })
