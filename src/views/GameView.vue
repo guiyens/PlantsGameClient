@@ -20,7 +20,7 @@ import ZoomCard from '@/components/ZoomCard.vue'
 import PlayerLog from '@/components/PlayerLog.vue'
 const url = '127.0.0.1:3000'
 
-var socket = io(url, { transports: ['websocket'] })
+/*var socket = io(url, { transports: ['websocket'] })*/
 
 const isUserValid = ref(import.meta.env.DEV)
 const nameConnected = ref('')
@@ -47,7 +47,7 @@ const lastActions: Ref<Array<string>> = ref([])
 const selectedCardToZoom: Ref<ICard | undefined> = ref(undefined)
 
 axios
-  .get('/')
+  .get('http://127.0.0.1:3000/hola')
   .then(function (response) {
     console.log(response)
   })
@@ -55,421 +55,285 @@ axios
     console.log(error)
   })
 
-if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('CriOS') > -1) {
-  isBrowserSupported.value = true
-} else {
-  alert('Lo sentimos, pero solo puedes jugar con Google Chrome')
-}
+// if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('CriOS') > -1) {
+//   isBrowserSupported.value = true
+// } else {
+//   alert('Lo sentimos, pero solo puedes jugar con Google Chrome')
+// }
 
-const playerCards: ComputedRef<Array<ICard>> = computed(() => {
-  const playerFound = game.value.players?.find(
-    (player: IPlayer) => player.socketId === socketId.value
-  )
-  return playerFound?.cards
-})
+// const playerCards: ComputedRef<Array<ICard>> = computed(() => {
+//   const playerFound = game.value.players?.find(
+//     (player: IPlayer) => player.socketId === socketId.value
+//   )
+//   return playerFound?.cards
+// })
 
-const playerCrop: ComputedRef<ICrop> = computed(() => {
-  const playerFound = game.value.players?.find(
-    (player: IPlayer) => player.socketId === socketId.value
-  )
-  return playerFound?.crop
-})
+// const playerCrop: ComputedRef<ICrop> = computed(() => {
+//   const playerFound = game.value.players?.find(
+//     (player: IPlayer) => player.socketId === socketId.value
+//   )
+//   return playerFound?.crop
+// })
 
-function addUser(name: string) {
-  if (name === '') {
-    return
-  }
-  if (name.length > 15) {
-    alert('El nombre no puede tener mas de 15 letras')
-    return
-  }
-  socket.emit('addUser', name)
-}
+// function addUser(name: string) {
+//   if (name === '') {
+//     return
+//   }
+//   if (name.length > 15) {
+//     alert('El nombre no puede tener mas de 15 letras')
+//     return
+//   }
+//   socket.emit('addUser', name)
+// }
 
-function disscard() {
-  lastActions.value.push('Selecciona las cartas que quieres descartar')
-  isSelectionActiveToDiscard.value = true
-  setTimeout(function () {
-    lastActions.value = []
-  }, 4000)
-}
+// function disscard() {
+//   lastActions.value.push('Selecciona las cartas que quieres descartar')
+//   isSelectionActiveToDiscard.value = true
+//   setTimeout(function () {
+//     lastActions.value = []
+//   }, 4000)
+// }
 
-function selectCard(card: ICard) {
-  if (isSelectionActiveToDiscard.value) {
-    selectCardsToDiscard(card)
-    return
-  }
-  if (isSelectionActiveToPlay.value) {
-    if (card.group === EGroup.EXTRES) {
-      selectedExtresCardToPlay.value = card
-      isSelectionActiveChoosePlayer.value = true
-      isSelectionActiveToPlay.value = false
-      return
-    }
-    if (card.group === EGroup.WILDCARD) {
-      selectedWildcardToChange.value = card
-      isSelectionCardFromWildcard.value = true
-      isSelectionActiveToPlay.value = false
-      return
-    }
-    sendCardToplay(card)
-    return
-  }
+// function selectCard(card: ICard) {
+//   if (isSelectionActiveToDiscard.value) {
+//     selectCardsToDiscard(card)
+//     return
+//   }
+//   if (isSelectionActiveToPlay.value) {
+//     if (card.group === EGroup.EXTRES) {
+//       selectedExtresCardToPlay.value = card
+//       isSelectionActiveChoosePlayer.value = true
+//       isSelectionActiveToPlay.value = false
+//       return
+//     }
+//     if (card.group === EGroup.WILDCARD) {
+//       selectedWildcardToChange.value = card
+//       isSelectionCardFromWildcard.value = true
+//       isSelectionActiveToPlay.value = false
+//       return
+//     }
+//     sendCardToplay(card)
+//     return
+//   }
 
-  selectedCardToZoom.value = card
-}
+//   selectedCardToZoom.value = card
+// }
 
-function selectCardsToDiscard(card: ICard) {
-  if (!isSelectionActiveToDiscard.value) {
-    return
-  }
-  card.isSelected = !card.isSelected
+// function selectCardsToDiscard(card: ICard) {
+//   if (!isSelectionActiveToDiscard.value) {
+//     return
+//   }
+//   card.isSelected = !card.isSelected
 
-  if (card.isSelected) {
-    selectedCardsToDiscard.value.push(card)
-  } else {
-    selectedCardsToDiscard.value = selectedCardsToDiscard.value.filter(
-      (cardToDiscard) => cardToDiscard.id !== card.id
-    )
-  }
-}
+//   if (card.isSelected) {
+//     selectedCardsToDiscard.value.push(card)
+//   } else {
+//     selectedCardsToDiscard.value = selectedCardsToDiscard.value.filter(
+//       (cardToDiscard) => cardToDiscard.id !== card.id
+//     )
+//   }
+// }
 
-function cancel() {
-  selectedCardsToDiscard.value = []
-  isSelectionActiveToDiscard.value = false
-  isSelectionActiveToPlay.value = false
-  isSelectionActiveChoosePlayer.value = false
-  isSelectionCardFromWildcard.value = false
-  selectedExtresCardToPlay.value = undefined
-  selectedWildcardToChange.value = undefined
-}
+// function cancel() {
+//   selectedCardsToDiscard.value = []
+//   isSelectionActiveToDiscard.value = false
+//   isSelectionActiveToPlay.value = false
+//   isSelectionActiveChoosePlayer.value = false
+//   isSelectionCardFromWildcard.value = false
+//   selectedExtresCardToPlay.value = undefined
+//   selectedWildcardToChange.value = undefined
+// }
 
-function sendDisscards() {
-  socket.emit('dismiss', selectedCardsToDiscard.value)
-  selectedCardsToDiscard.value = []
-  isSelectionActiveToDiscard.value = false
-}
+// function sendDisscards() {
+//   socket.emit('dismiss', selectedCardsToDiscard.value)
+//   selectedCardsToDiscard.value = []
+//   isSelectionActiveToDiscard.value = false
+// }
 
-function playCard() {
-  lastActions.value.push('Selecciona la carta que quieres jugar')
-  isSelectionActiveToPlay.value = true
-  setTimeout(function () {
-    lastActions.value = []
-  }, 1000)
-}
+// function playCard() {
+//   lastActions.value.push('Selecciona la carta que quieres jugar')
+//   isSelectionActiveToPlay.value = true
+//   setTimeout(function () {
+//     lastActions.value = []
+//   }, 1000)
+// }
 
-function sendCardToplay(card: ICard) {
-  socket.emit('playCard', card)
-  isSelectionActiveToPlay.value = false
-}
+// function sendCardToplay(card: ICard) {
+//   socket.emit('playCard', card)
+//   isSelectionActiveToPlay.value = false
+// }
 
-function sendExtresCardToplay(player: IPlayer) {
-  socket.emit('playExtressCard', {
-    card: selectedExtresCardToPlay.value,
-    playerId: player.socketId
-  })
-  isSelectionActiveChoosePlayer.value = false
-  selectedExtresCardToPlay.value = undefined
-}
+// function sendExtresCardToplay(player: IPlayer) {
+//   socket.emit('playExtressCard', {
+//     card: selectedExtresCardToPlay.value,
+//     playerId: player.socketId
+//   })
+//   isSelectionActiveChoosePlayer.value = false
+//   selectedExtresCardToPlay.value = undefined
+// }
 
-function sendWildCard(card: ICard) {
-  socket.emit('playWildcard', {
-    newCard: card,
-    wildcard: selectedWildcardToChange.value
-  })
-  isSelectionCardFromWildcard.value = false
-  selectedWildcardToChange.value = undefined
-}
+// function sendWildCard(card: ICard) {
+//   socket.emit('playWildcard', {
+//     newCard: card,
+//     wildcard: selectedWildcardToChange.value
+//   })
+//   isSelectionCardFromWildcard.value = false
+//   selectedWildcardToChange.value = undefined
+// }
 
-function closeSpecialCardPanel() {
-  isSpecialCardFound.value = false
-  SpecialCardFound.value = undefined
-}
+// function closeSpecialCardPanel() {
+//   isSpecialCardFound.value = false
+//   SpecialCardFound.value = undefined
+// }
 
-function setCode(code: string) {
-  socket.emit('ValidateUser', code)
-}
+// function setCode(code: string) {
+//   socket.emit('ValidateUser', code)
+// }
 
-function startGameNow() {
-  socket.emit('startGame')
-}
+// function startGameNow() {
+//   socket.emit('startGame')
+// }
 
-function displayPlayer(playerId: string): void {
-  userDisplayed.value = playerId
-}
+// function displayPlayer(playerId: string): void {
+//   userDisplayed.value = playerId
+// }
 
-function buildStringAction(log: ILog): string {
-  if (log.action === 'DISMISS') {
-    return `<strong>${log.player.name}</strong> se ha descartado`
-  }
-  if (log.action === 'DISCONNECT') {
-    return `<strong>${log.player.name}</strong> se ha desconectado`
-  }
-  if (log.action === EGroup.EXTRES) {
-    return `<strong>${log.player.name}</strong> ha lanzado una carta de <strong>${getActionText(
-      log.action
-    )}</strong> a <strong>${log.playerAffectted?.name}</strong>`
-  }
-  return `<strong>${log.player.name}</strong> ha jugado una carta de <strong>${getActionText(
-    log.action as EGroup
-  )}</strong>`
-}
+// function buildStringAction(log: ILog): string {
+//   if (log.action === 'DISMISS') {
+//     return `<strong>${log.player.name}</strong> se ha descartado`
+//   }
+//   if (log.action === 'DISCONNECT') {
+//     return `<strong>${log.player.name}</strong> se ha desconectado`
+//   }
+//   if (log.action === EGroup.EXTRES) {
+//     return `<strong>${log.player.name}</strong> ha lanzado una carta de <strong>${getActionText(
+//       log.action
+//     )}</strong> a <strong>${log.playerAffectted?.name}</strong>`
+//   }
+//   return `<strong>${log.player.name}</strong> ha jugado una carta de <strong>${getActionText(
+//     log.action as EGroup
+//   )}</strong>`
+// }
 
-function closeNotifications() {
-  lastActions.value = []
-}
+// function closeNotifications() {
+//   lastActions.value = []
+// }
 
-function getActionText(action: EGroup): string {
-  if (action === EGroup.EXTRES) {
-    return 'Estrés'
-  }
-  if (action === EGroup.VEGETETIVE_ORGAN) {
-    return 'Organo'
-  }
-  if (action === EGroup.INDUCTING_CONDITION) {
-    return 'Condiciones inductoras'
-  }
-  if (action === EGroup.TREATMENT) {
-    return 'Tratamiento'
-  }
-  if (action === EGroup.WILDCARD) {
-    return 'Comodín'
-  }
-  return ''
-}
+// function getActionText(action: EGroup): string {
+//   if (action === EGroup.EXTRES) {
+//     return 'Estrés'
+//   }
+//   if (action === EGroup.VEGETETIVE_ORGAN) {
+//     return 'Organo'
+//   }
+//   if (action === EGroup.INDUCTING_CONDITION) {
+//     return 'Condiciones inductoras'
+//   }
+//   if (action === EGroup.TREATMENT) {
+//     return 'Tratamiento'
+//   }
+//   if (action === EGroup.WILDCARD) {
+//     return 'Comodín'
+//   }
+//   return ''
+// }
 
-socket.on('connect', function () {
-  console.log('connected')
-  isServerConnected.value = true
-  isUserValid.value = import.meta.env.DEV
-  game.value = {}
-})
+// socket.on('connect', function () {
+//   console.log('connected')
+//   isServerConnected.value = true
+//   isUserValid.value = import.meta.env.DEV
+//   game.value = {}
+// })
 
-socket.on('ValidateUser', function (isValid) {
-  isUserValid.value = isValid
-  if (!isValid) {
-    errorNotValid.value = '¡El codigo no es valido!'
-  }
-})
+// socket.on('ValidateUser', function (isValid) {
+//   isUserValid.value = isValid
+//   if (!isValid) {
+//     errorNotValid.value = '¡El codigo no es valido!'
+//   }
+// })
 
-socket.on('disconnect', function (reason) {
-  console.log(reason)
-  isServerConnected.value = false
-  game.value = {}
-})
+// socket.on('disconnect', function (reason) {
+//   console.log(reason)
+//   isServerConnected.value = false
+//   game.value = {}
+// })
 
-socket.on('addedUser', function (name: string) {
-  nameConnected.value = name
-})
+// socket.on('addedUser', function (name: string) {
+//   nameConnected.value = name
+// })
 
-socket.on('socketCreated', function (id: string) {
-  socketId.value = id
-})
+// socket.on('socketCreated', function (id: string) {
+//   socketId.value = id
+// })
 
-socket.on('alreadyAddedUser', function () {
-  error.value = 'User name is not available, choose a new one'
-})
+// socket.on('alreadyAddedUser', function () {
+//   error.value = 'User name is not available, choose a new one'
+// })
 
-socket.on('updateGame', function (newGame: IGame) {
-  game.value = newGame
-  if (game.value.activityLog.length) {
-    const lastLog = game.value.activityLog[game.value.activityLog.length - 1]
-    if (lastLog.player.socketId !== socketId.value) {
-      lastActions.value.push(buildStringAction(lastLog))
-    }
+// socket.on('updateGame', function (newGame: IGame) {
+//   game.value = newGame
+//   if (game.value.activityLog.length) {
+//     const lastLog = game.value.activityLog[game.value.activityLog.length - 1]
+//     if (lastLog.player.socketId !== socketId.value) {
+//       lastActions.value.push(buildStringAction(lastLog))
+//     }
 
-    setTimeout(function () {
-      lastActions.value.push(
-        newGame.userActive !== socketId.value
-          ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
-              (player: IPlayer) => player.socketId === newGame.userActive
-            ).name}</strong>`
-          : 'Es <strong>tu turno</strong>'
-      )
-    }, 500)
+//     setTimeout(function () {
+//       lastActions.value.push(
+//         newGame.userActive !== socketId.value
+//           ? `Es el <strong>turno</strong> de <strong>${game.value.players?.find(
+//               (player: IPlayer) => player.socketId === newGame.userActive
+//             ).name}</strong>`
+//           : 'Es <strong>tu turno</strong>'
+//       )
+//     }, 500)
 
-    setTimeout(function () {
-      lastActions.value = []
-    }, 4000)
-  }
+//     setTimeout(function () {
+//       lastActions.value = []
+//     }, 4000)
+//   }
 
-  if (isFirstUpdate.value && !!newGame.userActive) {
-    userDisplayed.value = game.value.players?.find(
-      (player: IPlayer) => player.socketId === socketId.value
-    ).socketId
-    isFirstUpdate.value = false
-  }
-})
+//   if (isFirstUpdate.value && !!newGame.userActive) {
+//     userDisplayed.value = game.value.players?.find(
+//       (player: IPlayer) => player.socketId === socketId.value
+//     ).socketId
+//     isFirstUpdate.value = false
+//   }
+// })
 
-socket.on('closedGame', function () {
-  error.value = 'No se permiten más jugadores'
-})
+// socket.on('closedGame', function () {
+//   error.value = 'No se permiten más jugadores'
+// })
 
-socket.on('startedGame', function () {
-  error.value = 'El juego ya ha comenzado'
-})
+// socket.on('startedGame', function () {
+//   error.value = 'El juego ya ha comenzado'
+// })
 
-socket.on('SpecialCardFound', function (specialCardInfo: { newGame: IGame; specialCard: ICard }) {
-  isSpecialCardFound.value = true
-  SpecialCardFound.value = specialCardInfo.specialCard
-  game.value = specialCardInfo.newGame
-})
+// socket.on('SpecialCardFound', function (specialCardInfo: { newGame: IGame; specialCard: ICard }) {
+//   isSpecialCardFound.value = true
+//   SpecialCardFound.value = specialCardInfo.specialCard
+//   game.value = specialCardInfo.newGame
+// })
 
-socket.on('winnerGame', function (winnerSocketId: string) {
-  gameEnded.value = true
-  areYouWinner.value = socketId.value === winnerSocketId
-  setTimeout(() => {
-    location.reload()
-  }, 7000)
-})
+// socket.on('winnerGame', function (winnerSocketId: string) {
+//   gameEnded.value = true
+//   areYouWinner.value = socketId.value === winnerSocketId
+//   setTimeout(() => {
+//     location.reload()
+//   }, 7000)
+// })
 
-socket.on('error', (err) => {
-  console.log(err)
-  isServerConnected.value = false
-})
-socket.on('reconnect', (attempt) => {
-  isServerConnected.value = true
-})
+// socket.on('error', (err) => {
+//   console.log(err)
+//   isServerConnected.value = false
+// })
+// socket.on('reconnect', (attempt) => {
+//   isServerConnected.value = true
+// })
 </script>
 
 <template>
-  <main v-if="isBrowserSupported" class="main-container">
-    <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
-    <div class="container">
-      <div v-if="!gameEnded">
-        <!-- Error =========-->
-        <div class="error-container" v-if="error">
-          <div class="inital-panel-container">
-            <div class="inital-panel">
-              <h2 class="inital-panel__title inital-panel__text--red">¡Lo sentimos!</h2>
-              <p class="inital-panel__text inital-panel__text--red">
-                <strong>{{ error }}</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- Initial Panel =========-->
-        <InitialPanel
-          v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
-          :nameConnected="nameConnected"
-          :gameState="game.state"
-          :isUserValid="isUserValid"
-          :errorNotValid="errorNotValid"
-          :players="game.players"
-          :maxPlayers="game.maxPlayers"
-          @addUser="addUser"
-          @setCode="setCode"
-          @startGame="startGameNow"
-        ></InitialPanel>
-        <!--======== Players Selector =========-->
-        <div class="players-selector" v-if="nameConnected && game.state !== StateEnum.WAITING">
-          <div
-            class="player-selector"
-            @click="displayPlayer(player.socketId)"
-            v-for="player in game.players"
-            :key="player.socketId"
-            :class="{
-              'player-selector--active': player.socketId === userDisplayed,
-              'player-selector--player': player.socketId === socketId,
-              'player-selector--turn': player.socketId === game.userActive
-            }"
-          >
-            {{ player.socketId === socketId ? 'Yo' : player.name }}
-          </div>
-        </div>
-        <!--======== Players-other =========-->
-        <div v-if="nameConnected && game.state === StateEnum.STARTED">
-          <div
-            class="players-other"
-            v-for="(player, index) in game.players.filter(
-              (player: IPlayer) => player.socketId !== socketId && player.socketId === userDisplayed
-            )"
-            :key="index"
-          >
-            <Crop
-              v-if="player?.crop && game.state !== StateEnum.WAITING"
-              :playerCrop="player.crop"
-              :gameState="game.state"
-            ></Crop>
-            <div class="actions-and-cards">
-              <PlayerLog
-                :logs="
-                  game.activityLog?.filter(
-                    (element: ILog) => element.player.socketId === player.socketId
-                  )
-                "
-                :playerName="player.name"
-              ></PlayerLog>
-            </div>
-          </div>
-        </div>
-        <!--========Player =========-->
-        <div class="player" v-if="socketId === userDisplayed">
-          <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
-          <div class="actions-and-cards">
-            <PlayerControls
-              v-if="nameConnected && game.state === StateEnum.STARTED"
-              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-              :isSelectionActiveToPlay="isSelectionActiveToPlay"
-              :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
-              :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
-              :selectedCardsToDiscard="selectedCardsToDiscard"
-              :gameState="game.state"
-              :userActive="game.userActive"
-              :socketId="socketId"
-              @disscard="disscard"
-              @playCard="playCard"
-              @cancel="cancel"
-              @sendDisscards="sendDisscards"
-            ></PlayerControls>
-            <PlayerCards
-              :playerCards="playerCards"
-              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
-              :isSelectionActiveToPlay="isSelectionActiveToPlay"
-              :selectedCardsToDiscard="selectedCardsToDiscard"
-              :playerCrop="playerCrop"
-              @selectCard="selectCard"
-            ></PlayerCards>
-          </div>
-        </div>
-        <!--======== wildcard Selection panel =========-->
-        <WildCardSelectionPanel
-          v-if="isSelectionCardFromWildcard"
-          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
-          @sendWildCard="sendWildCard"
-          @cancel="cancel"
-        ></WildCardSelectionPanel>
-        <!--======== special Card panel =========-->
-        <SpecialCardPanel
-          v-if="isSpecialCardFound"
-          :SpecialCardFound="SpecialCardFound"
-          @closeSpecialCardPanel="closeSpecialCardPanel"
-        ></SpecialCardPanel>
-        <!--======== selection Player Panel =========-->
-        <BugPlayerSelection
-          v-if="isSelectionActiveChoosePlayer"
-          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
-          :selectedExtresCardToPlay="selectedExtresCardToPlay"
-          :players="game.players"
-          :playerId="socketId"
-          @sendExtresCardToplay="sendExtresCardToplay"
-          @cancel="cancel"
-        ></BugPlayerSelection>
-      </div>
-      <!--======== game Ended Panel =========-->
-      <GameEndedPanel v-if="gameEnded" :areYouWinner="areYouWinner"></GameEndedPanel>
-    </div>
-    <Notifications
-      v-if="true"
-      @closeNotifications="closeNotifications"
-      :lastActions="lastActions"
-    ></Notifications>
-    <ZoomCard
-      v-if="selectedCardToZoom"
-      @closeSpecialZoomCard="selectedCardToZoom = undefined"
-      :card="selectedCardToZoom"
-    ></ZoomCard>
-  </main>
+  <div>Hola</div>
 </template>
 
 <style>
