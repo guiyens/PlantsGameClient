@@ -323,7 +323,143 @@ socket.on('reconnect', (attempt) => {
 </script>
 
 <template>
-  <div>Hola</div>
+  <main v-if="isBrowserSupported" class="main-container">
+    <div class="server-flag" :class="{ 'server-flag--connected': isServerConnected }"></div>
+    <div class="container">
+      <div v-if="!gameEnded">
+        <!-- Error =========-->
+        <div class="error-container" v-if="error">
+          <div class="inital-panel-container">
+            <div class="inital-panel">
+              <h2 class="inital-panel__title inital-panel__text--red">¡Lo sentimos!</h2>
+              <p class="inital-panel__text inital-panel__text--red">
+                <strong>{{ error }}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Initial Panel =========-->
+        <InitialPanel
+          v-if="!error && (game.state === StateEnum.WAITING || !game.state)"
+          :nameConnected="nameConnected"
+          :gameState="game.state"
+          :isUserValid="isUserValid"
+          :errorNotValid="errorNotValid"
+          :players="game.players"
+          :maxPlayers="game.maxPlayers"
+          @addUser="addUser"
+          @setCode="setCode"
+          @startGame="startGameNow"
+        ></InitialPanel>
+        <!--======== Players Selector =========-->
+        <div class="players-selector" v-if="nameConnected && game.state !== StateEnum.WAITING">
+          <div
+            class="player-selector"
+            @click="displayPlayer(player.socketId)"
+            v-for="player in game.players"
+            :key="player.socketId"
+            :class="{
+              'player-selector--active': player.socketId === userDisplayed,
+              'player-selector--player': player.socketId === socketId,
+              'player-selector--turn': player.socketId === game.userActive
+            }"
+          >
+            {{ player.socketId === socketId ? 'Yo' : player.name }}
+          </div>
+        </div>
+        <!--======== Players-other =========-->
+        <div v-if="nameConnected && game.state === StateEnum.STARTED">
+          <div
+            class="players-other"
+            v-for="(player, index) in game.players.filter(
+              (player: IPlayer) => player.socketId !== socketId && player.socketId === userDisplayed
+            )"
+            :key="index"
+          >
+            <Crop
+              v-if="player?.crop && game.state !== StateEnum.WAITING"
+              :playerCrop="player.crop"
+              :gameState="game.state"
+            ></Crop>
+            <div class="actions-and-cards">
+              <PlayerLog
+                :logs="
+                  game.activityLog?.filter(
+                    (element: ILog) => element.player.socketId === player.socketId
+                  )
+                "
+                :playerName="player.name"
+              ></PlayerLog>
+            </div>
+          </div>
+        </div>
+        <!--========Player =========-->
+        <div class="player" v-if="socketId === userDisplayed">
+          <Crop :playerCrop="playerCrop" :gameState="game.state"></Crop>
+          <div class="actions-and-cards">
+            <PlayerControls
+              v-if="nameConnected && game.state === StateEnum.STARTED"
+              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+              :isSelectionActiveToPlay="isSelectionActiveToPlay"
+              :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+              :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
+              :selectedCardsToDiscard="selectedCardsToDiscard"
+              :gameState="game.state"
+              :userActive="game.userActive"
+              :socketId="socketId"
+              @disscard="disscard"
+              @playCard="playCard"
+              @cancel="cancel"
+              @sendDisscards="sendDisscards"
+            ></PlayerControls>
+            <PlayerCards
+              :playerCards="playerCards"
+              :isSelectionActiveToDiscard="isSelectionActiveToDiscard"
+              :isSelectionActiveToPlay="isSelectionActiveToPlay"
+              :selectedCardsToDiscard="selectedCardsToDiscard"
+              :playerCrop="playerCrop"
+              @selectCard="selectCard"
+            ></PlayerCards>
+          </div>
+        </div>
+        <!--======== wildcard Selection panel =========-->
+        <WildCardSelectionPanel
+          v-if="isSelectionCardFromWildcard"
+          :isSelectionCardFromWildcard="isSelectionCardFromWildcard"
+          @sendWildCard="sendWildCard"
+          @cancel="cancel"
+        ></WildCardSelectionPanel>
+        <!--======== special Card panel =========-->
+        <SpecialCardPanel
+          v-if="isSpecialCardFound"
+          :SpecialCardFound="SpecialCardFound"
+          @closeSpecialCardPanel="closeSpecialCardPanel"
+        ></SpecialCardPanel>
+        <!--======== selection Player Panel =========-->
+        <BugPlayerSelection
+          v-if="isSelectionActiveChoosePlayer"
+          :isSelectionActiveChoosePlayer="isSelectionActiveChoosePlayer"
+          :selectedExtresCardToPlay="selectedExtresCardToPlay"
+          :players="game.players"
+          :playerId="socketId"
+          @sendExtresCardToplay="sendExtresCardToplay"
+          @cancel="cancel"
+        ></BugPlayerSelection>
+      </div>
+      <!--======== game Ended Panel =========-->
+      <GameEndedPanel v-if="gameEnded" :areYouWinner="areYouWinner"></GameEndedPanel>
+    </div>
+    <Notifications
+      v-if="true"
+      @closeNotifications="closeNotifications"
+      :lastActions="lastActions"
+    ></Notifications>
+    <ZoomCard
+      v-if="selectedCardToZoom"
+      @closeSpecialZoomCard="selectedCardToZoom = undefined"
+      :card="selectedCardToZoom"
+    ></ZoomCard>
+  </main>
 </template>
 
 <style>
