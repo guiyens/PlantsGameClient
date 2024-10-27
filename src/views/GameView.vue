@@ -17,7 +17,7 @@ import InitialPanel from '@/components/InitialPanel.vue'
 import BugPlayerSelection from '@/components/BugPlayerSelection.vue'
 import ZoomCard from '@/components/ZoomCard.vue'
 import PlayerLog from '@/components/PlayerLog.vue'
-const url = import.meta.env.DEV ? '127.0.0.1:3000' : 'http://193.146.101.243/test'
+const url = import.meta.env.DEV ? '127.0.0.1:3000' : '/test'
 
 var socket = io(url, { transports: ['websocket'] })
 
