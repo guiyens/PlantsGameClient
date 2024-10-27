@@ -309,7 +309,7 @@ socket.on('winnerGame', function (winnerSocketId: string) {
   gameEnded.value = true
   areYouWinner.value = socketId.value === winnerSocketId
   setTimeout(() => {
-    location.reload()
+    window.location.href = location.hostname
   }, 7000)
 })
 
